@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# Databases
+backend/airaa.db
+airaa.db
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/yarn-error.log
+frontend/package-lock.json
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OSM Cache overrides if unwanted
+# (We keep graphml cached so the demo loads instantly out of the box!)
+
+# OS
+.DS_Store
+Thumbs.db
