@@ -12,6 +12,10 @@ env/
 backend/airaa.db
 airaa.db
 
+# OSMnx Cache
+cache/
+.openstreetmap/
+
 # Node / Frontend
 frontend/node_modules/
 frontend/dist/
@@ -27,9 +31,6 @@ frontend/package-lock.json
 *.njsproj
 *.sln
 *.sw?
-
-# OSM Cache overrides if unwanted
-# (We keep graphml cached so the demo loads instantly out of the box!)
 
 # OS
 .DS_Store

@@ -3,32 +3,32 @@ import random
 import datetime
 import math
 from faker import Faker
-from db import init_db, insert_report
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from ml.nlp_classifier import classify_report_fallback
+from data.db import init_db, insert_report
+from ml.nlp_classifier import classify_report_ml
 
 fake = Faker()
 
-# Bounding box for Hauz Khas & Safdarjung Enclave
+# Bounding box for Chennai OMR & Taramani
 BBOX = {
-    "south": 28.535,
-    "west": 77.185,
-    "north": 28.570,
-    "east": 77.225
+    "south": 12.960,
+    "west": 80.220,
+    "north": 12.995,
+    "east": 80.265
 }
 
-# Hotspots for clustering (transit hubs, markets, parks)
+# Hotspots for spatial clustering in Chennai
 HOTSPOTS = [
-    {"name": "Green Park Metro Station", "lat": 28.558, "lng": 77.206, "weight": 0.25},
-    {"name": "Hauz Khas Metro Station", "lat": 28.543, "lng": 77.206, "weight": 0.20},
-    {"name": "Hauz Khas Village / Deer Park", "lat": 28.553, "lng": 77.194, "weight": 0.20},
-    {"name": "Safdarjung Development Area (SDA) Market", "lat": 28.546, "lng": 77.200, "weight": 0.15},
-    {"name": "Safdarjung Hospital / Ring Road", "lat": 28.567, "lng": 77.208, "weight": 0.10},
-    {"name": "Green Park Main Market", "lat": 28.561, "lng": 77.203, "weight": 0.10}
+    {"name": "Taramani MRTS Station", "lat": 12.9862, "lng": 80.2421, "weight": 0.25},
+    {"name": "Tidel Park / OMR Junction", "lat": 12.9892, "lng": 80.2465, "weight": 0.20},
+    {"name": "Perungudi Bus Stop / OMR", "lat": 12.9642, "lng": 80.2481, "weight": 0.20},
+    {"name": "SRP Tools Junction", "lat": 12.9801, "lng": 80.2452, "weight": 0.15},
+    {"name": "Kandanchavadi Bus Stop", "lat": 12.9691, "lng": 80.2475, "weight": 0.10},
+    {"name": "VHS Hospital Link Road", "lat": 12.9928, "lng": 80.2442, "weight": 0.10}
 ]
 
-# Report templates for realistic simulated text
 TEMPLATES = {
     "poor lighting": [
         "The streetlights near the park are completely broken, making it pitch black at night.",
@@ -75,32 +75,25 @@ TEMPLATES = {
 }
 
 def generate_coordinate_near_hotspot(hotspot: dict) -> tuple:
-    # Generate coordinates using a normal distribution around the hotspot to create realistic density clusters
-    std_dev = 0.0025 # roughly 250 meters spread
+    std_dev = 0.0020  # ~200 meters spread
     lat = random.gauss(hotspot["lat"], std_dev)
     lng = random.gauss(hotspot["lng"], std_dev)
     
-    # Clip to bounding box just in case
     lat = max(BBOX["south"], min(BBOX["north"], lat))
     lng = max(BBOX["west"], min(BBOX["east"], lng))
     return lat, lng
 
 def generate_random_coordinate() -> tuple:
-    # Fallback to random uniform coordinate in the bbox
     lat = random.uniform(BBOX["south"], BBOX["north"])
     lng = random.uniform(BBOX["west"], BBOX["east"])
     return lat, lng
 
 def generate_report(timestamp: datetime.datetime) -> dict:
-    # Select category based on realistic distribution
     categories = ["poor lighting", "harassment", "stalking", "unsafe infrastructure", "assault", "other"]
-    # Assault is rarer, poor lighting and harassment are more common
     weights = [0.30, 0.25, 0.15, 0.15, 0.05, 0.10]
     category = random.choices(categories, weights=weights)[0]
     
-    # Generate lat/lng using hotspots (85% cluster, 15% noise)
     if random.random() < 0.85:
-        # Choose hotspot based on weights
         hotspot = random.choices(HOTSPOTS, weights=[h["weight"] for h in HOTSPOTS])[0]
         lat, lng = generate_coordinate_near_hotspot(hotspot)
     else:
@@ -108,8 +101,6 @@ def generate_report(timestamp: datetime.datetime) -> dict:
         
     description = random.choice(TEMPLATES[category])
     
-    # User-assigned severity slider (1-5)
-    # Give higher severity for assault/stalking, lower for lighting/infrastructure
     if category == "assault":
         severity = random.randint(4, 5)
     elif category == "stalking":
@@ -121,8 +112,8 @@ def generate_report(timestamp: datetime.datetime) -> dict:
     else:
         severity = random.randint(1, 4)
         
-    # Classify using fallback rules to write to db immediately
-    classification = classify_report_fallback(description)
+    # Seed reports are pre-classified using local classical model to build F1-scores
+    classification = classify_report_ml(description)
     
     return {
         "category": category,
@@ -134,43 +125,37 @@ def generate_report(timestamp: datetime.datetime) -> dict:
         "category_ml": classification["category_ml"],
         "sentiment": classification["sentiment"],
         "timestamp": timestamp.isoformat(),
-        "method": "rule-based fallback (seeder)"
+        "method": "classical fallback (seeder)",
+        "status": "approved"
     }
 
 def main():
-    # Remove existing database if exists to ensure clean seed
     db_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "airaa.db")
     if os.path.exists(db_file):
         os.remove(db_file)
         print(f"Removed existing database: {db_file}")
         
     init_db()
-    print("Initialized SQLite database.")
+    print("Initialized SQLite database with Status support.")
     
-    # Generate 400 reports over the last 30 days
-    # Skew timestamps toward evening/night (6 PM to 3 AM)
     num_reports = 400
     start_date = datetime.datetime.now() - datetime.timedelta(days=30)
     
-    print(f"Generating {num_reports} synthetic reports for the pilot zone...")
+    print(f"Generating {num_reports} synthetic Chennai reports...")
     
     reports_seeded = 0
     for _ in range(num_reports):
-        # Pick a random day in the last 30 days
         days_offset = random.uniform(0, 30)
         report_time = start_date + datetime.timedelta(days=days_offset)
         
-        # Skew time of day: 70% chance of being between 18:00 and 03:00
         if random.random() < 0.70:
             hour = random.choice([18, 19, 20, 21, 22, 23, 0, 1, 2])
             minute = random.randint(0, 59)
-            second = random.randint(0, 59)
-            report_time = report_time.replace(hour=hour, minute=minute, second=second)
+            report_time = report_time.replace(hour=hour, minute=minute)
         else:
             hour = random.randint(3, 17)
             minute = random.randint(0, 59)
-            second = random.randint(0, 59)
-            report_time = report_time.replace(hour=hour, minute=minute, second=second)
+            report_time = report_time.replace(hour=hour, minute=minute)
             
         report = generate_report(report_time)
         insert_report(report)

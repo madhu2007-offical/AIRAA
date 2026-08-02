@@ -6,22 +6,21 @@ import numpy as np
 from typing import List, Dict, Any, Tuple
 from sklearn.ensemble import RandomForestClassifier
 
-# Bounding box configuration (matches pilot_zone.json)
+# Bounding box configuration for OMR & Taramani, Chennai
 BBOX = {
-    "south": 28.535,
-    "west": 77.185,
-    "north": 28.570,
-    "east": 77.225
+    "south": 12.960,
+    "west": 80.220,
+    "north": 12.995,
+    "east": 80.265
 }
 
 # Grid parameters
 LAT_STEP = 0.0010  # ~111 meters
-LNG_STEP = 0.0011  # ~107 meters
+LNG_STEP = 0.0011  # ~113 meters
 
 def get_distance_meters(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     """
     Computes distance in meters between two coordinates using flat-earth approximation.
-    Suitable for small coordinates within a local pilot zone.
     """
     lat_mid = math.radians((lat1 + lat2) * 0.5)
     dy = (lat1 - lat2) * 111000.0
@@ -30,7 +29,7 @@ def get_distance_meters(lat1: float, lng1: float, lat2: float, lng2: float) -> f
 
 def generate_grid_cells() -> List[Dict[str, Any]]:
     """
-    Generates grid cells covering the pilot zone.
+    Generates grid cells covering the Chennai pilot zone.
     """
     cells = []
     cell_id = 0
@@ -56,8 +55,8 @@ def generate_grid_cells() -> List[Dict[str, Any]]:
 
 def analyze_corroboration(reports: List[Dict[str, Any]], distance_threshold: float = 150.0, days_threshold: float = 3.0) -> List[int]:
     """
-    For each report, count the number of other reports submitted within distance_threshold meters 
-    and days_threshold days. This represents the spatial-temporal corroboration factor.
+    For each report, count the number of other approved reports submitted within distance_threshold meters 
+    and days_threshold days.
     """
     corroboration_counts = []
     
@@ -93,15 +92,37 @@ def analyze_corroboration(reports: List[Dict[str, Any]], distance_threshold: flo
         
     return corroboration_counts
 
+def check_report_moderation(report_in: Dict[str, Any], existing_reports: List[Dict[str, Any]]) -> str:
+    """
+    Anti-gaming heuristic:
+    Flags a report as 'pending' for moderation if severity >= 4 and has 0 corroborating reports
+    within 200 meters. Prevents isolated false alarms from single-handedly upgrading grid cells.
+    """
+    if report_in["severity"] < 4:
+        return "approved"
+        
+    has_neighbor = False
+    for r in existing_reports:
+        # Only check against approved reports
+        if r.get("status", "approved") != "approved":
+            continue
+        dist = get_distance_meters(report_in["latitude"], report_in["longitude"], r["latitude"], r["longitude"])
+        if dist <= 200.0:
+            has_neighbor = True
+            break
+            
+    return "approved" if has_neighbor else "pending"
+
 def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], RandomForestClassifier]:
     """
-    Computes KDE features for the grid cells, trains a RandomForestClassifier to segment
-    them, and predicts risk scores/tiers. Returns a list of cell definitions and the trained classifier.
+    Computes KDE features with corroboration weighting and trains a RandomForest model to classify cell risk tiers.
     """
     cells = generate_grid_cells()
     
-    if not reports:
-        # Default all cells to low risk if there are no reports
+    # Filter reports to use ONLY approved logs for public scoring
+    approved_reports = [r for r in reports if r.get("status", "approved") == "approved"]
+    
+    if not approved_reports:
         for cell in cells:
             cell.update({
                 "risk_score": 0.0,
@@ -114,20 +135,17 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
             })
         return cells, None
 
-    # Compute corroboration factor for each report
-    corroboration_counts = analyze_corroboration(reports)
-    for idx, r in enumerate(reports):
+    # Compute corroboration counts
+    corroboration_counts = analyze_corroboration(approved_reports)
+    for idx, r in enumerate(approved_reports):
         r["corroboration_count"] = corroboration_counts[idx]
         
     now = datetime.datetime.now()
-    
-    # Grid cell feature engineering
     cell_features = []
     
     # Gaussian kernel parameter (bandwidth in meters)
     h = 120.0 
-    # Exponential time-decay rate (lambda)
-    time_decay_rate = 0.05  # exp(-0.05 * age_in_days)
+    time_decay_rate = 0.05
     
     for cell in cells:
         c_lat = cell["lat_mid"]
@@ -144,17 +162,13 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
         category_counts = {}
         night_reports = 0
         
-        for idx, r in enumerate(reports):
-            # Calculate distance
+        for idx, r in enumerate(approved_reports):
             dist = get_distance_meters(c_lat, c_lng, r["latitude"], r["longitude"])
-            
-            # Apply Gaussian spatial decay (ignore reports > 400m to speed up)
             if dist > 400.0:
                 continue
                 
             spatial_kernel = math.exp(-(dist ** 2) / (2 * (h ** 2)))
             
-            # Time age decay
             try:
                 t_report = datetime.datetime.fromisoformat(r["timestamp"])
             except ValueError:
@@ -162,20 +176,21 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
             age_days = max(0.0, (now - t_report).total_seconds() / 86400.0)
             temporal_decay = math.exp(-time_decay_rate * age_days)
             
-            # Corroboration multiplier
-            corroboration_multiplier = 1.0 + (0.25 * r["corroboration_count"])
+            # Trust Heuristic: Minimum-Corroboration Threshold
+            # Discount uncorroborated single reports by 80% to mitigate gaming
+            if r["corroboration_count"] == 0:
+                corroboration_multiplier = 0.20
+            else:
+                corroboration_multiplier = 1.0 + (0.25 * r["corroboration_count"])
             
-            # Combined report weight
+            # Weighted calculation
             r_weight = spatial_kernel * temporal_decay * corroboration_multiplier
-            
             kde_score += r_weight
             
-            # Severity mapping (use ML severity if available, otherwise user severity)
             sev = r.get("severity_ml") if r.get("severity_ml") is not None else r["severity"]
             weighted_severity_sum += sev * r_weight
             weight_sum += r_weight
             
-            # Metrics for explanation panel (within 150m)
             if dist <= 150.0:
                 report_count_nearby += 1
                 corroboration_sum += r["corroboration_count"]
@@ -185,7 +200,6 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
                 cat = r.get("category_ml") or r["category"]
                 category_counts[cat] = category_counts.get(cat, 0) + 1
                 
-                # Check if report was at night (6 PM - 3 AM)
                 hour = t_report.hour
                 if hour >= 18 or hour < 3:
                     night_reports += 1
@@ -194,7 +208,6 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
         corroboration_avg = (corroboration_sum / report_count_nearby) if report_count_nearby > 0 else 0.0
         night_ratio = (night_reports / report_count_nearby) if report_count_nearby > 0 else 0.0
         
-        # Save engineered features for training / prediction
         cell_features.append({
             "cell_id": cell["cell_id"],
             "kde_score": kde_score,
@@ -208,8 +221,7 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
         
     df_feats = pd.DataFrame(cell_features)
     
-    # Labeling heuristics for RF model training
-    # This creates self-training target labels based on logical thresholds
+    # Labeling thresholds (trained on features)
     def assign_heuristic_label(row):
         score = row["kde_score"]
         sev = row["avg_severity"]
@@ -222,28 +234,23 @@ def train_and_score_grid(reports: List[Dict[str, Any]]) -> Tuple[List[Dict[str, 
             
     df_feats["label"] = df_feats.apply(assign_heuristic_label, axis=1)
     
-    # Train Random Forest Classifier
     X = df_feats[["kde_score", "avg_severity", "corroboration_avg", "night_ratio"]].values
     y = df_feats["label"].values
     
     rf = RandomForestClassifier(n_estimators=50, max_depth=5, random_state=42)
     rf.fit(X, y)
     
-    # Predict risk tier
     preds = rf.predict(X)
     probs = rf.predict_proba(X)
     
     tier_map = {0: "low", 1: "medium", 2: "high"}
     
-    # Combine results back to cells
     scored_cells = []
     for idx, cell in enumerate(cells):
         feat = cell_features[idx]
         pred_label = preds[idx]
         
-        # Risk score is a normalized scalar combining probability of High/Med risk and raw density
         raw_kde = feat["kde_score"]
-        # Normalize raw KDE to 0-1 (cap at 3.0 density as max risk weight)
         norm_kde = min(1.0, raw_kde / 3.0)
         prob_high_med = probs[idx][1] + probs[idx][2] if len(probs[idx]) > 2 else (probs[idx][1] if len(probs[idx]) > 1 else 0.0)
         risk_score_val = round(0.4 * norm_kde + 0.6 * prob_high_med, 3)
