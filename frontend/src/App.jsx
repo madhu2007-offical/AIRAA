@@ -308,16 +308,18 @@ export default function App() {
 
   const fetchInitialData = async () => {
     try {
-      // Test backend connection
-      const checkRes = await fetch('/');
-      if (!checkRes.ok) throw new Error("Offline");
+      // Test backend connection by checking reports API
+      const res = await fetch('/api/reports');
+      if (!res.ok) throw new Error("Offline");
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("API did not return array");
       
+      setReports(data);
       setLocalMode(false);
-      fetchReports();
       fetchGrid();
       fetchEmergencyServices();
     } catch (err) {
-      console.warn("Backend offline or sleeping. Enabling in-browser local simulation engine.");
+      console.warn("Backend offline or sleeping. Enabling in-browser local simulation engine:", err.message);
       setLocalMode(true);
       initializeLocalSimulation();
     }
@@ -704,9 +706,14 @@ export default function App() {
     try {
       const res = await fetch('/api/reports');
       const data = await res.json();
-      setReports(data);
+      if (Array.isArray(data)) {
+        setReports(data);
+      } else {
+        throw new Error("Reports API did not return array");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load reports:", err);
+      enableLocalFallback();
     }
   };
 
@@ -715,10 +722,40 @@ export default function App() {
       const url = refresh ? '/api/risk-grid?refresh=true' : '/api/risk-grid';
       const res = await fetch(url);
       const data = await res.json();
-      setGridData(data);
+      if (data && data.type === 'FeatureCollection' && Array.isArray(data.features)) {
+        setGridData(data);
+      } else {
+        throw new Error("Risk grid API did not return a valid FeatureCollection");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load risk grid:", err);
+      enableLocalFallback();
     }
+  };
+
+  const fetchEmergencyServices = async () => {
+    try {
+      const res = await fetch('/api/emergency');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setEmergencyFacilities(data);
+      } else {
+        throw new Error("Emergency API did not return an array");
+      }
+    } catch (err) {
+      console.error("Failed to load emergency features:", err);
+      setEmergencyFacilities(BACKUP_EMERGENCY);
+    }
+  };
+
+  const enableLocalFallback = () => {
+    setLocalMode(prev => {
+      if (!prev) {
+        console.warn("API request failed. Activating in-browser local fallback engine.");
+        initializeLocalSimulation();
+      }
+      return true;
+    });
   };
 
   const calculateRoute = async () => {
@@ -957,7 +994,8 @@ export default function App() {
     setStatusMessage("SOS Mode active. Simulated emergency alert dispatched to trusted contacts.");
   };
 
-  const highRiskCount = gridData ? gridData.features.filter(f => f.properties.risk_tier === 'high').length : 223;
+  const hasValidGrid = gridData && gridData.type === 'FeatureCollection' && Array.isArray(gridData.features);
+  const highRiskCount = hasValidGrid ? gridData.features.filter(f => f.properties && f.properties.risk_tier === 'high').length : 223;
 
   return (
     <div className="min-h-screen bg-[#F4F5F9] text-[#1B2138] flex flex-col font-sans antialiased">
@@ -1567,7 +1605,7 @@ export default function App() {
                       />
 
                       {/* Cells */}
-                      {showGrid && gridData && (
+                      {showGrid && hasValidGrid && (
                         <GeoJSON 
                           key={gridData.features.length + "_" + (selectedCell ? selectedCell.cell_info.cell_id : 'none')}
                           data={gridData} 
