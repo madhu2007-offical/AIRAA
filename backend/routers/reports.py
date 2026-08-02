@@ -113,7 +113,7 @@ def get_moderation_queue():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@post_approve_router := APIRouter(prefix="/api/reports", tags=["reports"])
+post_approve_router = APIRouter(prefix="/api/reports", tags=["reports"])
 @post_approve_router.post("/{report_id}/approve")
 def approve_pending_report(report_id: int):
     """
