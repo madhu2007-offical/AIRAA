@@ -943,19 +943,19 @@ export default function App() {
     const cellId = feature.properties.cell_id;
     const isSelected = selectedCell && selectedCell.cell_info.cell_id === cellId;
     
-    let color = '#1F7A54'; 
+    let color = 'var(--status-safe)'; 
     let fillOpacity = 0.04;
     
     if (riskTier === 'high') {
-      color = '#A93A3A'; 
+      color = 'var(--status-risk)'; 
       fillOpacity = 0.40;
     } else if (riskTier === 'medium') {
-      color = '#B9740E'; 
+      color = 'var(--status-caution)'; 
       fillOpacity = 0.20;
     }
     
     return {
-      color: isSelected ? '#22366E' : color,
+      color: isSelected ? 'var(--brand)' : color,
       weight: isSelected ? 2.5 : 0.8,
       fillColor: color,
       fillOpacity: fillOpacity,
@@ -1775,9 +1775,9 @@ export default function App() {
                         const isActive = activeRouteIndex === idx;
                         const flippedCoords = r.coordinates.map(c => [c[1], c[0]]);
                         
-                        let color = '#22366E'; 
-                        if (r.type === 'safest' || r.type === 'shortest_and_safest') color = '#1F7A54'; 
-                        if (r.type === 'alternative') color = '#8b5cf6'; 
+                        let color = 'var(--brand)'; 
+                        if (r.type === 'safest' || r.type === 'shortest_and_safest') color = 'var(--status-safe)'; 
+                        if (r.type === 'alternative') color = 'var(--status-caution)'; 
                         
                         return (
                           <React.Fragment key={idx}>
