@@ -2,23 +2,23 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --ink: #12182B;
-  --ink-soft: #2B3352;
-  --paper: #F4F5F9;
-  --paper-raised: #FFFFFF;
-  --line: #D8DBE6;
-  --brand: #22366E;
-  --brand-deep: #182750;
-  --seal: #A9791E;
-  --safe: #1F7A54;
-  --safe-bg: #E7F4EE;
-  --caution: #B9740E;
-  --caution-bg: #FBF0DE;
-  --risk: #A93A3A;
-  --risk-bg: #F8E9E9;
-  --text: #1B2138;
-  --text-muted: #5B6280;
-  --radius: 3px;
+  --ink: #070A13;
+  --ink-soft: #0D1325;
+  --paper: #070A13;
+  --paper-raised: #0D1325;
+  --line: rgba(255, 255, 255, 0.08);
+  --brand: #CCA857;
+  --brand-deep: #B38F3E;
+  --seal: #E9C878;
+  --safe: #10B981;
+  --safe-bg: rgba(16, 185, 129, 0.1);
+  --caution: #D9A63E;
+  --caution-bg: rgba(217, 166, 62, 0.1);
+  --risk: #E13D3D;
+  --risk-bg: rgba(225, 61, 61, 0.1);
+  --text: #F4F5F9;
+  --text-muted: #8A94A6;
+  --radius: 4px;
 }
 
 * {
@@ -49,7 +49,15 @@ a {
 }
 
 .serif {
-  font-family: 'IBM Plex Serif', serif;
+  font-family: 'Cinzel', 'Playfair Display', 'IBM Plex Serif', serif;
+  letter-spacing: 0.03em;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #ffffff 15%, #f7dfa4 60%, #cca857 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .visually-hidden {
@@ -153,7 +161,7 @@ header.main {
   font-weight: 600;
   font-size: 22px;
   letter-spacing: 0.06em;
-  color: var(--ink);
+  color: #ffffff;
   line-height: 1;
 }
 
@@ -174,19 +182,19 @@ nav.primary a {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  color: var(--ink-soft);
+  color: var(--text-muted);
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
 }
 
 nav.primary a:hover {
-  border-bottom-color: var(--seal);
-  color: var(--ink);
+  border-bottom-color: var(--brand);
+  color: var(--brand);
 }
 
 .nav-cta {
   background: var(--brand);
-  color: #fff !important;
+  color: var(--ink) !important;
   padding: 9px 18px !important;
   border-radius: var(--radius);
   border-bottom: none !important;
@@ -194,7 +202,8 @@ nav.primary a:hover {
 }
 
 .nav-cta:hover {
-  background: var(--brand-deep);
+  background: var(--seal);
+  color: var(--ink) !important;
   border-bottom: none !important;
 }
 
@@ -410,7 +419,7 @@ nav.primary a:hover {
 
 .ticker-item {
   font-size: 13px;
-  color: var(--ink-soft);
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -470,7 +479,7 @@ section {
   font-family: 'IBM Plex Serif', serif;
   font-size: clamp(24px, 3vw, 32px);
   margin: 0 0 12px;
-  color: var(--ink);
+  color: #ffffff;
 }
 
 .section-head p {
@@ -549,8 +558,39 @@ section {
 .leaflet-container {
   width: 100%;
   height: 100%;
-  background: var(--paper) !important;
-  filter: saturate(0.85);
+  background: #070a13 !important;
+}
+
+/* Dark mode tile overlay */
+.leaflet-tile-container {
+  filter: invert(1) hue-rotate(180deg) brightness(0.65) contrast(1.2) saturate(0.85);
+}
+
+/* Dark mode popup & control styles */
+.leaflet-bar {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+.leaflet-bar a, .leaflet-bar a:hover {
+  background-color: var(--paper-raised) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.leaflet-bar a:hover {
+  background-color: #1A233D !important;
+  color: var(--brand) !important;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: var(--paper-raised) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+.leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+}
+.leaflet-popup-close-button:hover {
+  color: #fff !important;
 }
 
 /* Custom Scrollbar for list scroll areas */
@@ -670,7 +710,7 @@ section {
   padding: 8px 16px;
   font-size: 12.5px;
   font-weight: 500;
-  color: var(--ink-soft);
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -766,3 +806,179 @@ footer ul a:hover {
   nav.primary { display: none; }
   .footer-inner { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   SINGAPEN PREMIUM DARK-GOLD THEME OVERRIDES
+   ========================================================================== */
+
+/* override general body layout background to prevent white flashes */
+body, html {
+  background-color: var(--paper) !important;
+  color: var(--text) !important;
+}
+
+/* Override Tailwind bg-white to dark-slate raised panels */
+.bg-white {
+  background-color: var(--paper-raised) !important;
+  color: var(--text) !important;
+}
+
+.bg-\[\#F4F5F9\] {
+  background-color: var(--paper) !important;
+  color: var(--text) !important;
+}
+
+.bg-slate-50 {
+  background-color: var(--ink-soft) !important;
+  color: var(--text) !important;
+}
+
+.bg-slate-900\/40 {
+  background-color: rgba(7, 10, 19, 0.4) !important;
+}
+
+/* Text color helpers */
+.text-\[\#1B2138\] {
+  color: var(--text) !important;
+}
+
+.text-\[\#5B6280\] {
+  color: var(--text-muted) !important;
+}
+
+.text-slate-700 {
+  color: var(--text-muted) !important;
+}
+
+.text-slate-500 {
+  color: var(--text-muted) !important;
+}
+
+/* Border overlays */
+.border-\[\#D8DBE6\] {
+  border-color: var(--line) !important;
+}
+
+.border-slate-700\/60 {
+  border-color: var(--line) !important;
+}
+
+/* Glassmorphism panels */
+.bg-white\/95 {
+  background-color: rgba(13, 19, 37, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Branding overrides from blue to gold */
+.text-\[\#22366E\] {
+  color: var(--brand) !important;
+}
+
+.border-\[\#22366E\] {
+  border-color: var(--brand) !important;
+}
+
+.bg-\[\#22366E\] {
+  background-color: var(--brand) !important;
+  color: var(--ink) !important;
+}
+
+.bg-\[\#22366E\]\/10 {
+  background-color: rgba(204, 168, 87, 0.1) !important;
+  color: var(--brand) !important;
+}
+
+.hover\:bg-\[\#182750\]:hover {
+  background-color: var(--seal) !important;
+  color: var(--ink) !important;
+}
+
+/* Override utility strip styling */
+.utility-strip {
+  background: #04060b !important;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Override hero background gradients */
+.hero {
+  background: linear-gradient(180deg, #090d18 0%, #070a13 100%) !important;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero p.lede {
+  color: var(--text-muted) !important;
+}
+
+/* Custom styles for service card links */
+.service-card .link {
+  color: var(--brand) !important;
+}
+
+.service-card .link:hover {
+  color: var(--seal) !important;
+}
+
+.service-card {
+  border-top-color: var(--brand) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.service-card:hover {
+  box-shadow: 0 8px 30px rgba(204, 168, 87, 0.1) !important;
+  border-top-color: var(--seal) !important;
+}
+
+/* Custom form elements dark styling */
+select, textarea, input[type="text"] {
+  background-color: var(--ink-soft) !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+}
+
+select:focus, textarea:focus, input[type="text"]:focus {
+  border-color: var(--brand) !important;
+}
+
+/* SOS panel styles */
+.bg-red-50 {
+  background-color: rgba(225, 61, 61, 0.08) !important;
+  border-color: rgba(225, 61, 61, 0.18) !important;
+  color: #ff6666 !important;
+}
+
+.bg-red-100 {
+  background-color: rgba(225, 61, 61, 0.15) !important;
+  border-color: rgba(225, 61, 61, 0.25) !important;
+  color: #ff4d4d !important;
+}
+
+.bg-slate-100 {
+  background-color: var(--ink-soft) !important;
+}
+
+.hover\:bg-slate-100:hover {
+  background-color: #1A233D !important;
+}
+
+.hover\:bg-slate-50:hover {
+  background-color: #1A233D !important;
+}
+
+.text-slate-900 {
+  color: #ffffff !important;
+}
+
+.bg-emerald-500\/20 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  color: var(--safe) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+.bg-amber-500\/20 {
+  background-color: rgba(217, 166, 62, 0.15) !important;
+  color: var(--caution) !important;
+  border-color: rgba(217, 166, 62, 0.25) !important;
+}
+

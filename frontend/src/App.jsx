@@ -9,7 +9,10 @@ import {
   useMap, 
   useMapEvents 
 } from 'react-leaflet';
-import L from 'leaflet';
+import * as L from 'leaflet';
+if (typeof window !== 'undefined') {
+  window.L = L;
+}
 import { 
   Shield, 
   MapPin, 
@@ -959,6 +962,24 @@ export default function App() {
     }
   };
 
+  const handleMapClick = (latlng) => {
+    if (!latlng) return;
+    const coords = [latlng.lat, latlng.lng];
+    if (mapClickMode === 'origin') {
+      setOrigin(coords);
+      setMapClickMode('none');
+      setStatusMessage(`Origin terminal set to: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`);
+    } else if (mapClickMode === 'destination') {
+      setDestination(coords);
+      setMapClickMode('none');
+      setStatusMessage(`Destination terminal set to: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`);
+    } else if (mapClickMode === 'report') {
+      setReportCoords(coords);
+      setMapClickMode('none');
+      setStatusMessage(`Report incident pin placed at: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`);
+    }
+  };
+
   // Compute reports counts per grid cell for k-Anonymity privacy filter
   const reportCellCounts = {};
   reports.forEach(r => {
@@ -1033,16 +1054,10 @@ export default function App() {
       <header className="main">
         <div className="header-inner">
           <div className="brand-block">
-            <svg className="seal-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AIRAA seal">
-              <circle cx="24" cy="24" r="22" stroke="#A93A3A" stroke-width="2" opacity="0.55"/>
-              <circle cx="24" cy="24" r="17" stroke="#B9740E" stroke-width="2" opacity="0.7"/>
-              <circle cx="24" cy="24" r="12" stroke="#1F7A54" stroke-width="2" opacity="0.85"/>
-              <path d="M24 12 L33 16.5 V24.5 C33 30.5 29 34.5 24 36.5 C19 34.5 15 30.5 15 24.5 V16.5 L24 12Z" fill="#12182B"/>
-              <circle cx="24" cy="23.5" r="3.4" fill="#F4F5F9"/>
-            </svg>
+            <img src="/logo.png" className="w-12 h-12 rounded-full border-2 border-[#CCA857]/45 shadow-md shadow-[#CCA857]/20 object-cover bg-[#0D1325]" alt="AIRAA Logo" />
             <div className="brand-text">
-              <div className="name serif">AIRAA</div>
-              <div className="tagline font-medium uppercase tracking-wider">Adaptive Intelligence for Risk Awareness &amp; Action</div>
+              <div className="name serif">AIRAA x SINGAPEN</div>
+              <div className="tagline font-medium uppercase tracking-wider">Women Safety, Emergency Support &amp; Awareness Platform</div>
             </div>
           </div>
           
@@ -1085,7 +1100,7 @@ export default function App() {
                     <span className="dot"></span>
                     <span>System status: live · Chennai OMR pilot</span>
                   </div>
-                  <h1 className="serif">See a street's risk before you walk it.</h1>
+                  <h1 className="serif gold-gradient-text">See a street's risk before you walk it.</h1>
                   <p className="lede font-sans">
                     AIRAA fuses community safety reports with public data into a continuously updated risk map — then routes you around the parts of the city it doesn't trust yet.
                   </p>
@@ -1100,7 +1115,15 @@ export default function App() {
                 </div>
                 
                 {/* STATS */}
-                <div className="stat-panel">
+                <div className="stat-panel border border-[#CCA857]/20 bg-[#0D1325]/90 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#CCA857]/5 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="flex items-center gap-4 mb-5 border-b border-white/5 pb-4">
+                    <img src="/logo.png" className="w-16 h-16 rounded-full border border-[#CCA857]/55 shadow-lg shadow-[#CCA857]/15 object-cover bg-[#070A13]" alt="AIRAA Official Seal" />
+                    <div>
+                      <h4 className="serif text-sm font-bold text-white tracking-wide uppercase leading-tight">AI-Powered Safety Intelligence</h4>
+                      <span className="text-[10px] text-[#CCA857] font-mono tracking-widest uppercase block mt-1 font-semibold">Chennai District Pilot</span>
+                    </div>
+                  </div>
                   <div className="panel-label">
                     <span>Pilot zone summary</span>
                     <span className="mono">OMR CHENNAI</span>
@@ -1160,19 +1183,19 @@ export default function App() {
                 </div>
                 <div className="cards-row">
                   <div className="service-card">
-                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>
+                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>
                     <h3 className="serif">Report an incident</h3>
                     <p>Log a location, category, and short description. AIRAA's classifier reads it and updates the grid within minutes.</p>
                     <a href="#map-section" onClick={() => { setActiveTab('report'); }} className="link font-semibold">Open reporting form →</a>
                   </div>
                   <div className="service-card">
-                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><path d="M9 3v15M15 6v15"/></svg>
+                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><path d="M9 3v15M15 6v15"/></svg>
                     <h3 className="serif">Explore the risk map</h3>
                     <p>Browse Chennai OMR cells scored by RandomForest. Check the corroborating metrics and historical logs.</p>
                     <a href="#map-section" className="link font-semibold">View risk map →</a>
                   </div>
                   <div className="service-card">
-                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19l6-14 4 9 3-6 3 11"/></svg>
+                    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M4 19l6-14 4 9 3-6 3 11"/></svg>
                     <h3 className="serif">Plan a safe route</h3>
                     <p>Enter origin and destination points on OMR. Compare paths, safety reduction indices, and transit risk parameters.</p>
                     <a href="#map-section" onClick={() => { setActiveTab('route'); }} className="link font-semibold">Plan a route →</a>
@@ -1519,6 +1542,39 @@ export default function App() {
                                   </span>
                                 </div>
                               ))}
+                            </div>
+                          </div>
+
+                          {/* Singapen Awareness & Guidelines Card */}
+                          <div className="p-3 bg-[#0D1325]/85 border border-[#CCA857]/20 rounded-lg space-y-2 mt-4 text-slate-300">
+                            <div className="flex justify-between items-center text-[10px] font-bold text-[#E9C878] uppercase tracking-wider">
+                              <span>Singapen Safety Guidelines</span>
+                              <Shield className="w-3.5 h-3.5 text-[#CCA857]" />
+                            </div>
+                            <div className="space-y-1.5 text-[11px] leading-relaxed">
+                              <p>
+                                <strong>BNS Legal Protect:</strong> Provisions under the Bharatiya Nyaya Sanhita classify cyberstalking, voyeurism, and physical harassment as severe offenses.
+                              </p>
+                              <p>
+                                <strong>POSH Act Guide:</strong> Document incidents immediately and file a written complaint to your workplace Internal Complaints Committee (ICC).
+                              </p>
+                              <p>
+                                <strong>National Help Desks:</strong>
+                              </p>
+                              <div className="grid grid-cols-2 gap-1.5 pt-1">
+                                <a 
+                                  href="tel:1091" 
+                                  className="p-1.5 bg-[#1A233D] rounded border border-white/5 text-center text-white hover:border-[#CCA857]/35 transition font-semibold"
+                                >
+                                  📞 Women (1091)
+                                </a>
+                                <a 
+                                  href="tel:1930" 
+                                  className="p-1.5 bg-[#1A233D] rounded border border-white/5 text-center text-white hover:border-[#CCA857]/35 transition font-semibold"
+                                >
+                                  💻 Cyber (1930)
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
