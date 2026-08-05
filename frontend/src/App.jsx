@@ -1136,7 +1136,7 @@ export default function App() {
               />
             </div>
             <div className="brand-text">
-              <div className="name serif">AIRAA x SINGAPEN</div>
+              <div className="name serif">AIRAA</div>
               <div className="tagline font-medium uppercase tracking-wider">Women Safety, Emergency Support &amp; Awareness Platform</div>
             </div>
           </div>
@@ -1645,10 +1645,10 @@ export default function App() {
                             </div>
                           </div>
 
-                          {/* Singapen Awareness & Guidelines Card */}
+                          {/* Safety Guidelines Card */}
                           <div className="p-3 bg-[#0D1325]/85 border border-[#CCA857]/20 rounded-lg space-y-2 mt-4 text-slate-300">
                             <div className="flex justify-between items-center text-[10px] font-bold text-[#E9C878] uppercase tracking-wider">
-                              <span>Singapen Safety Guidelines</span>
+                              <span>AIRAA Safety Guidelines</span>
                               <Shield className="w-3.5 h-3.5 text-[#CCA857]" />
                             </div>
                             <div className="space-y-1.5 text-[11px] leading-relaxed">
@@ -2035,7 +2035,6 @@ export default function App() {
                     Built in the spirit of established global safety-data initiatives, not in isolation:
                   </div>
                   <div className="chip-row">
-                    <span className="chip"><span className="chip-dot"></span> Singappen</span>
                     <span className="chip"><span className="chip-dot"></span> UN Women Safe Cities Initiative</span>
                     <span className="chip"><span className="chip-dot"></span> Free to Be — Global Crowdmapping</span>
                     <span className="chip"><span className="chip-dot"></span> Google AI Studio</span>
