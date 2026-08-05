@@ -1054,18 +1054,21 @@ export default function App() {
       <header className="main">
         <div className="header-inner">
           <div className="brand-block">
-            <svg className="seal-mark w-12 h-12 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AIRAA Official Seal">
-              {/* Outer Ring: --status-risk (#B23A3A) */}
-              <circle cx="50" cy="50" r="45" stroke="var(--status-risk)" strokeWidth="3.5" />
-              {/* Middle Ring: --seal-gold (#C9972B) */}
-              <circle cx="50" cy="50" r="38" stroke="var(--seal-gold)" strokeWidth="2.5" />
-              {/* Inner Ring: --status-safe (#1F8A5F) */}
-              <circle cx="50" cy="50" r="30" stroke="var(--status-safe)" strokeWidth="3" />
-              {/* Shield glyph center in --ink (#0D1224) */}
-              <path d="M50 22 C59 22 66 26 66 35 C66 48 50 61 50 69 C50 61 34 48 34 35 C34 26 41 22 50 22 Z" fill="var(--ink)" stroke="var(--seal-gold)" strokeWidth="2" />
-              {/* Central dot inside shield */}
-              <circle cx="50" cy="41" r="4" fill="var(--seal-gold)" />
-            </svg>
+            <div className="relative w-12 h-12 flex-shrink-0">
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Outer Ring: --status-risk */}
+                <circle cx="50" cy="50" r="46" stroke="var(--status-risk)" strokeWidth="3.5" />
+                {/* Middle Ring: --seal-gold */}
+                <circle cx="50" cy="50" r="39" stroke="var(--seal-gold)" strokeWidth="2.5" />
+                {/* Inner Ring: --status-safe */}
+                <circle cx="50" cy="50" r="32" stroke="var(--status-safe)" strokeWidth="3" />
+              </svg>
+              <img 
+                src="/logo.png" 
+                className="absolute inset-[8px] w-[32px] h-[32px] rounded-full object-cover bg-white" 
+                alt="AIRAA Logo" 
+              />
+            </div>
             <div className="brand-text">
               <div className="name serif">AIRAA x SINGAPEN</div>
               <div className="tagline font-medium uppercase tracking-wider">Women Safety, Emergency Support &amp; Awareness Platform</div>
@@ -1135,18 +1138,21 @@ export default function App() {
                 <div className="stat-panel border border-[var(--line)] bg-[var(--ink-raised)] relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--seal-gold)]/5 rounded-full blur-2xl pointer-events-none"></div>
                   <div className="flex items-center gap-4 mb-5 border-b border-white/5 pb-4">
-                    <svg className="seal-mark w-16 h-16 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AIRAA Official Seal">
-                      {/* Outer Ring: --status-risk (#B23A3A) */}
-                      <circle cx="50" cy="50" r="45" stroke="var(--status-risk)" strokeWidth="3.5" />
-                      {/* Middle Ring: --seal-gold (#C9972B) */}
-                      <circle cx="50" cy="50" r="38" stroke="var(--seal-gold)" strokeWidth="2.5" />
-                      {/* Inner Ring: --status-safe (#1F8A5F) */}
-                      <circle cx="50" cy="50" r="30" stroke="var(--status-safe)" strokeWidth="3" />
-                      {/* Shield glyph center in --ink (#0D1224) */}
-                      <path d="M50 22 C59 22 66 26 66 35 C66 48 50 61 50 69 C50 61 34 48 34 35 C34 26 41 22 50 22 Z" fill="var(--ink)" stroke="var(--seal-gold)" strokeWidth="2" />
-                      {/* Central dot inside shield */}
-                      <circle cx="50" cy="41" r="4" fill="var(--seal-gold)" />
-                    </svg>
+                    <div className="relative w-16 h-16 flex-shrink-0">
+                      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {/* Outer Ring: --status-risk */}
+                        <circle cx="50" cy="50" r="46" stroke="var(--status-risk)" strokeWidth="3.5" />
+                        {/* Middle Ring: --seal-gold */}
+                        <circle cx="50" cy="50" r="39" stroke="var(--seal-gold)" strokeWidth="2.5" />
+                        {/* Inner Ring: --status-safe */}
+                        <circle cx="50" cy="50" r="32" stroke="var(--status-safe)" strokeWidth="3" />
+                      </svg>
+                      <img 
+                        src="/logo.png" 
+                        className="absolute inset-[11px] w-[42px] h-[42px] rounded-full object-cover bg-white" 
+                        alt="AIRAA Official Logo" 
+                      />
+                    </div>
                     <div>
                       <h4 className="serif text-sm font-bold text-white tracking-wide uppercase leading-tight">AI-Powered Safety Intelligence</h4>
                       <span className="text-[10px] text-[var(--seal-gold)] font-mono tracking-widest uppercase block mt-1 font-semibold">Chennai District Pilot</span>
