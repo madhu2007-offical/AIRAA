@@ -705,6 +705,72 @@ export default function App() {
   };
 
   // --- API BACKEND COMMUNICATORS ---
+  const fetchPendingQueue = async () => {
+    setModeratorLoading(true);
+    try {
+      const res = await fetch('/api/reports/pending');
+      if (!res.ok) throw new Error("Failed to fetch pending queue");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setPendingReports(data);
+      }
+    } catch (err) {
+      console.error("fetchPendingQueue error:", err);
+      setStatusMessage("Error fetching moderator queue");
+    } finally {
+      setModeratorLoading(false);
+    }
+  };
+
+  const fetchEvaluationMetrics = async () => {
+    setEvalLoading(true);
+    try {
+      const res = await fetch('/api/evaluation');
+      if (!res.ok) throw new Error("Failed to fetch evaluation metrics");
+      const data = await res.json();
+      setEvaluationData(data);
+    } catch (err) {
+      console.error("fetchEvaluationMetrics error:", err);
+      setStatusMessage("Error fetching evaluation metrics");
+    } finally {
+      setEvalLoading(false);
+    }
+  };
+
+  const handleApproveReport = async (rId) => {
+    try {
+      const res = await fetch(`/api/reports/${rId}/approve`, {
+        method: 'POST'
+      });
+      if (!res.ok) throw new Error(`Failed to approve report ${rId}`);
+      
+      // Update local states
+      await fetchReports();
+      await fetchGrid(true);
+      await fetchPendingQueue();
+      
+      setStatusMessage(`Report ${rId} approved and merged successfully.`);
+    } catch (err) {
+      console.error(err);
+      setStatusMessage(err.message || "Failed to approve report");
+    }
+  };
+
+  const handleRejectReport = async (rId) => {
+    try {
+      const res = await fetch(`/api/reports/${rId}/reject`, {
+        method: 'DELETE'
+      });
+      if (!res.ok) throw new Error(`Failed to reject report ${rId}`);
+      
+      await fetchPendingQueue();
+      setStatusMessage(`Report ${rId} rejected and removed.`);
+    } catch (err) {
+      console.error(err);
+      setStatusMessage(err.message || "Failed to reject report");
+    }
+  };
+
   const fetchReports = async () => {
     try {
       const res = await fetch('/api/reports');
