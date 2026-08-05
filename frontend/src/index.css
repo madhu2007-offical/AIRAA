@@ -32,7 +32,7 @@ html {
 @layer base {
   body {
     margin: 0;
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
     color: var(--text);
     background: var(--paper);
     -webkit-font-smoothing: antialiased;
@@ -49,8 +49,8 @@ a {
 }
 
 .serif {
-  font-family: 'Cinzel', 'Playfair Display', 'IBM Plex Serif', serif;
-  letter-spacing: 0.03em;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .gold-gradient-text {
@@ -157,8 +157,8 @@ header.main {
 }
 
 .brand-text .name {
-  font-family: 'Cinzel', 'Playfair Display', serif;
-  font-weight: 700;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', sans-serif;
+  font-weight: 800;
   font-size: 25px;
   letter-spacing: 0.04em;
   background: linear-gradient(135deg, #ffffff 35%, #f7dfa4 75%, #cca857 100%);
@@ -269,8 +269,8 @@ nav.primary a:hover {
 }
 
 .hero h1 {
-  font-family: 'Cinzel', 'Playfair Display', 'IBM Plex Serif', serif;
-  font-weight: 700;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 800;
   font-size: clamp(34px, 4.5vw, 54px);
   line-height: 1.15;
   margin: 0 0 18px;
@@ -479,7 +479,8 @@ section {
 }
 
 .section-head h2 {
-  font-family: 'Cinzel', 'Playfair Display', 'IBM Plex Serif', serif;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 700;
   font-size: clamp(27px, 3.5vw, 38px);
   margin: 0 0 12px;
   color: #ffffff;
@@ -523,7 +524,7 @@ section {
 .service-card h3 {
   font-size: 19px;
   margin: 0 0 8px;
-  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
   font-weight: 700;
 }
 
@@ -661,7 +662,7 @@ section {
 .process-step h3 {
   font-size: 17.5px;
   margin: 0 0 8px;
-  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', sans-serif;
   font-weight: 700;
 }
 
