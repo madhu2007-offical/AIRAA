@@ -1054,7 +1054,18 @@ export default function App() {
       <header className="main">
         <div className="header-inner">
           <div className="brand-block">
-            <img src="/logo.png" className="w-12 h-12 rounded-full border-2 border-[#CCA857]/45 shadow-md shadow-[#CCA857]/20 object-cover bg-[#0D1325]" alt="AIRAA Logo" />
+            <svg className="seal-mark w-12 h-12 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AIRAA Official Seal">
+              {/* Outer Ring: --status-risk (#B23A3A) */}
+              <circle cx="50" cy="50" r="45" stroke="var(--status-risk)" strokeWidth="3.5" />
+              {/* Middle Ring: --seal-gold (#C9972B) */}
+              <circle cx="50" cy="50" r="38" stroke="var(--seal-gold)" strokeWidth="2.5" />
+              {/* Inner Ring: --status-safe (#1F8A5F) */}
+              <circle cx="50" cy="50" r="30" stroke="var(--status-safe)" strokeWidth="3" />
+              {/* Shield glyph center in --ink (#0D1224) */}
+              <path d="M50 22 C59 22 66 26 66 35 C66 48 50 61 50 69 C50 61 34 48 34 35 C34 26 41 22 50 22 Z" fill="var(--ink)" stroke="var(--seal-gold)" strokeWidth="2" />
+              {/* Central dot inside shield */}
+              <circle cx="50" cy="41" r="4" fill="var(--seal-gold)" />
+            </svg>
             <div className="brand-text">
               <div className="name serif">AIRAA x SINGAPEN</div>
               <div className="tagline font-medium uppercase tracking-wider">Women Safety, Emergency Support &amp; Awareness Platform</div>
@@ -1083,6 +1094,12 @@ export default function App() {
               <span>Moderator Queue</span>
             </button>
             <a href="#map-section" onClick={() => { setCurrentView('main'); setActiveTab('route'); }} className="nav-cta">Plan a Safe Route</a>
+            
+            {/* Pulsing Live status pill */}
+            <div className="flex items-center gap-2 px-2.5 py-1 bg-white/5 border border-white/10 rounded font-mono text-[10px] uppercase tracking-wider font-semibold">
+              <span className="status-dot-pulse"></span>
+              <span className="text-[#F4F5F9]">SYSTEM STATUS: LIVE</span>
+            </div>
           </nav>
         </div>
       </header>
@@ -1115,13 +1132,24 @@ export default function App() {
                 </div>
                 
                 {/* STATS */}
-                <div className="stat-panel border border-[#CCA857]/20 bg-[#0D1325]/90 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#CCA857]/5 rounded-full blur-2xl pointer-events-none"></div>
+                <div className="stat-panel border border-[var(--line)] bg-[var(--ink-raised)] relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--seal-gold)]/5 rounded-full blur-2xl pointer-events-none"></div>
                   <div className="flex items-center gap-4 mb-5 border-b border-white/5 pb-4">
-                    <img src="/logo.png" className="w-16 h-16 rounded-full border border-[#CCA857]/55 shadow-lg shadow-[#CCA857]/15 object-cover bg-[#070A13]" alt="AIRAA Official Seal" />
+                    <svg className="seal-mark w-16 h-16 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AIRAA Official Seal">
+                      {/* Outer Ring: --status-risk (#B23A3A) */}
+                      <circle cx="50" cy="50" r="45" stroke="var(--status-risk)" strokeWidth="3.5" />
+                      {/* Middle Ring: --seal-gold (#C9972B) */}
+                      <circle cx="50" cy="50" r="38" stroke="var(--seal-gold)" strokeWidth="2.5" />
+                      {/* Inner Ring: --status-safe (#1F8A5F) */}
+                      <circle cx="50" cy="50" r="30" stroke="var(--status-safe)" strokeWidth="3" />
+                      {/* Shield glyph center in --ink (#0D1224) */}
+                      <path d="M50 22 C59 22 66 26 66 35 C66 48 50 61 50 69 C50 61 34 48 34 35 C34 26 41 22 50 22 Z" fill="var(--ink)" stroke="var(--seal-gold)" strokeWidth="2" />
+                      {/* Central dot inside shield */}
+                      <circle cx="50" cy="41" r="4" fill="var(--seal-gold)" />
+                    </svg>
                     <div>
                       <h4 className="serif text-sm font-bold text-white tracking-wide uppercase leading-tight">AI-Powered Safety Intelligence</h4>
-                      <span className="text-[10px] text-[#CCA857] font-mono tracking-widest uppercase block mt-1 font-semibold">Chennai District Pilot</span>
+                      <span className="text-[10px] text-[var(--seal-gold)] font-mono tracking-widest uppercase block mt-1 font-semibold">Chennai District Pilot</span>
                     </div>
                   </div>
                   <div className="panel-label">
@@ -1174,7 +1202,7 @@ export default function App() {
             </div>
 
             {/* INTRO CARDS */}
-            <section id="services" className="py-16">
+            <section id="services" className="py-16 light-bg">
               <div className="section-inner">
                 <div className="section-head">
                   <div className="section-eyebrow">What you can do here</div>
@@ -1214,7 +1242,7 @@ export default function App() {
                 </div>
                 
                 {/* WORKSPACE SHELL */}
-                <div className="border border-[#D8DBE6] rounded bg-white shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[620px]">
+                <div className="map-card-wrapper rounded overflow-hidden flex flex-col md:flex-row min-h-[620px]">
                   
                   {/* LEFT CONTROL PANEL (350px width) */}
                   <div className="w-full md:w-88 flex flex-col border-r border-[#D8DBE6] bg-white shrink-0 font-sans">
@@ -1895,7 +1923,7 @@ export default function App() {
             </section>
 
             {/* METHODOLOGY */}
-            <section id="process" className="py-16">
+            <section id="process" className="py-16 light-bg">
               <div className="section-inner">
                 <div className="section-head">
                   <div className="section-eyebrow">How a report becomes a route</div>
@@ -1935,6 +1963,7 @@ export default function App() {
                     Built in the spirit of established global safety-data initiatives, not in isolation:
                   </div>
                   <div className="chip-row">
+                    <span className="chip"><span className="chip-dot"></span> Singappen</span>
                     <span className="chip"><span className="chip-dot"></span> UN Women Safe Cities Initiative</span>
                     <span className="chip"><span className="chip-dot"></span> Free to Be — Global Crowdmapping</span>
                     <span className="chip"><span className="chip-dot"></span> Google AI Studio</span>
