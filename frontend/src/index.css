@@ -2,8 +2,8 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --ink: #0D1224;
-  --ink-raised: #131A33;
+  --ink: #060813;
+  --ink-raised: #0B0F20;
   --paper: #F4F5F9;
   --brand: #C9972B;
   --seal-gold: #E9C878;
@@ -905,7 +905,7 @@ body, html {
 }
 
 .light-bg .section-head p {
-  color: #4A526D !important;
+  color: #1F2438 !important;
 }
 
 .light-bg .section-eyebrow {
@@ -931,7 +931,7 @@ body, html {
 }
 
 .light-bg .service-card p {
-  color: #4A526D !important;
+  color: #1F2438 !important;
 }
 
 .light-bg .service-card .link {
@@ -958,7 +958,7 @@ body, html {
 }
 
 .light-bg .process-step p {
-  color: #4A526D !important;
+  color: #1F2438 !important;
 }
 
 .light-bg .process-step .step-num {
@@ -987,7 +987,7 @@ body, html {
 }
 
 .map-card-wrapper .text-slate-500, .map-card-wrapper .text-slate-700, .map-card-wrapper .text-\[\#5B6280\] {
-  color: #4A526D !important;
+  color: #1F2438 !important;
 }
 
 .map-card-wrapper .bg-slate-100 {
