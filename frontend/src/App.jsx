@@ -1730,7 +1730,7 @@ export default function App() {
                   </div>
 
                   {/* MIDDLE MAP VIEWPORT */}
-                  <div className="flex-1 min-h-[440px] relative">
+                  <div className={`flex-1 min-h-[440px] relative ${mapClickMode !== 'none' ? 'map-crosshair' : ''}`}>
                     
                     {/* Floating Map Controls */}
                     <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
