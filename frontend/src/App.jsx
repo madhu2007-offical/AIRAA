@@ -965,7 +965,11 @@ export default function App() {
 
   const onEachCell = (feature, layer) => {
     layer.on({
-      click: () => {
+      click: (e) => {
+        if (mapClickMode !== 'none') {
+          handleMapClick(e.latlng);
+          return;
+        }
         if (localMode) {
           // Client-side cell inspect
           const cell_info = feature.properties;
@@ -1357,6 +1361,27 @@ export default function App() {
                       {/* TAB 1: SAFETY ROUTE SOLVER */}
                       {activeTab === 'route' && (
                         <div className="space-y-4">
+                          {mapZoom < 10 && (
+                            <div className="p-3 text-xs bg-amber-50 border border-amber-200 text-[#B9740E] rounded font-medium flex flex-col gap-2 shadow-sm">
+                              <div className="flex items-center gap-1.5 font-bold uppercase text-[9px]">
+                                <AlertTriangle className="w-3.5 h-3.5 text-[#B9740E]" />
+                                <span>Tamil Nadu Macro View Active</span>
+                              </div>
+                              <p className="leading-relaxed text-[11px] text-slate-700">
+                                The safety routing engine and active grid cell overlays are deployed for the Chennai OMR &amp; Taramani pilot zone.
+                              </p>
+                              <button 
+                                onClick={() => {
+                                  setMapCenter([12.9862, 80.2421]);
+                                  setMapZoom(14);
+                                  setStatusMessage("Map view centered on Chennai OMR pilot zone.");
+                                }}
+                                className="w-full py-1.5 text-center bg-[#C9972B] hover:bg-[#E9C878] text-white font-bold rounded transition text-[10px] uppercase tracking-wider cursor-pointer"
+                              >
+                                📍 Focus Chennai Pilot Zone
+                              </button>
+                            </div>
+                          )}
                           <div className="space-y-1">
                             <span className="text-[10px] font-bold text-[#5B6280] tracking-wider uppercase block">Focus Shortcuts</span>
                             <div className="grid grid-cols-2 gap-1">
@@ -1476,6 +1501,28 @@ export default function App() {
                       {/* TAB 2: INCIDENT REPORT INGEST */}
                       {activeTab === 'report' && (
                         <form onSubmit={submitReport} className="space-y-4 text-xs font-sans">
+                          {mapZoom < 10 && (
+                            <div className="p-3 text-xs bg-amber-50 border border-amber-200 text-[#B9740E] rounded font-medium flex flex-col gap-2 shadow-sm">
+                              <div className="flex items-center gap-1.5 font-bold uppercase text-[9px]">
+                                <AlertTriangle className="w-3.5 h-3.5 text-[#B9740E]" />
+                                <span>Tamil Nadu Macro View Active</span>
+                              </div>
+                              <p className="leading-relaxed text-[11px] text-slate-700">
+                                Logging safety incidents feeds the active grid models deployed for the Chennai OMR &amp; Taramani pilot zone.
+                              </p>
+                              <button 
+                                type="button"
+                                onClick={() => {
+                                  setMapCenter([12.9862, 80.2421]);
+                                  setMapZoom(14);
+                                  setStatusMessage("Map view centered on Chennai OMR pilot zone.");
+                                }}
+                                className="w-full py-1.5 text-center bg-[#C9972B] hover:bg-[#E9C878] text-white font-bold rounded transition text-[10px] uppercase tracking-wider cursor-pointer"
+                              >
+                                📍 Focus Chennai Pilot Zone
+                              </button>
+                            </div>
+                          )}
                           <div className="space-y-2">
                             <span className="text-[10px] font-bold text-[#5B6280] tracking-wider uppercase block">Pin Coordinates</span>
                             <button
@@ -1763,7 +1810,7 @@ export default function App() {
                       {/* Cells */}
                       {showGrid && hasValidGrid && (
                         <GeoJSON 
-                          key={gridData.features.length + "_" + (selectedCell ? selectedCell.cell_info.cell_id : 'none')}
+                          key={gridData.features.length + "_" + mapClickMode + "_" + localMode + "_" + (selectedCell ? selectedCell.cell_info.cell_id : 'none')}
                           data={gridData} 
                           style={getCellStyle}
                           onEachFeature={onEachCell}

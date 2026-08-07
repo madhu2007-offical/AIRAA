@@ -23,8 +23,7 @@ if GEMINI_API_KEY:
     HAS_GEMINI = True
 else:
     HAS_GEMINI = False
-    logger.warning("GEMINI_API_KEY not configured. Falling back to classical ML classifier (Decision Tree).")
-
+   
 VALID_CATEGORIES = ["harassment", "stalking", "poor lighting", "unsafe infrastructure", "assault", "other"]
 
 # Labeled templates for synthetic dataset expansion & classical ML training
