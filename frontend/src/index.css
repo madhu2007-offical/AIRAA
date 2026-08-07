@@ -11,7 +11,7 @@
   --status-caution: #D98F1E;
   --status-risk: #B23A3A;
   --text-primary: #F4F5F9;
-  --text-muted: #9BA3C4;
+  --text-muted: #D0D6F2;
   --line: rgba(255, 255, 255, 0.12);
   --radius: 4px;
 
@@ -106,7 +106,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 /* ---------- Utility strip ---------- */
 .utility-strip {
   background: var(--ink);
-  color: #C7CCDE;
+  color: var(--text-muted);
   font-size: 12.5px;
   padding: 6px 24px;
   display: flex;
@@ -131,7 +131,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .utility-strip button {
   background: none;
   border: none;
-  color: #C7CCDE;
+  color: var(--text-muted);
   font-family: inherit;
   font-size: 12.5px;
   cursor: pointer;
@@ -371,7 +371,7 @@ nav.primary a:hover {
   font-size: 11px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: #9BA3C4;
+  color: var(--text-muted);
   margin-bottom: 14px;
   display: flex;
   justify-content: space-between;
@@ -397,7 +397,7 @@ nav.primary a:hover {
 
 .stat .lbl {
   font-size: 12px;
-  color: #9BA3C4;
+  color: var(--text-muted);
   margin-top: 3px;
 }
 
@@ -767,7 +767,7 @@ section {
 /* Footer */
 footer {
   background: var(--ink);
-  color: #B7BCD4;
+  color: var(--text-muted);
 }
 
 .footer-inner {
