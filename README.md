@@ -1,549 +1,240 @@
 <div align="center">
 
-<img src="https://via.placeholder.com/160x160.png?text=AIRAA" alt="AIRAA Logo" width="140"/>
+<img width="1536" height="548" alt="poster" src="<img width="1672" height="941" alt="ChatGPT Image Aug 8, 2026, 11_24_44 AM" src="https://github.com/user-attachments/assets/3c5d67f8-8ce5-480c-8171-7f2fbd978486" />
+" />
 
-# AIRAA
-### Adaptive Intelligence for Risk Awareness & Action
+<br/>
 
-**AI-powered safety navigation — routes people around danger, not just around traffic.**
-
-[![Status](https://img.shields.io/badge/status-hackathon%20prototype-orange)]()
-[![Python](https://img.shields.io/badge/backend-Python%203-blue)]()
-[![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Vite-61dafb)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://frontend-theta-bice-51.vercel.app/)
-
-[Live Demo](https://frontend-theta-bice-51.vercel.app/) · [Report a Bug](../../issues) · [Request a Feature](../../issues)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![OSMnx](https://img.shields.io/badge/OSMnx-NetworkX-3E863E?style=for-the-badge&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google_Gemini-classifier-8E75B2?style=for-the-badge&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Hackathon_Build-ED1C24?style=for-the-badge)
 
 </div>
 
+<br/>
+
+<h1 align="center">AIRAA</h1>
+<p align="center"><i>Adaptive Intelligence for Risk Awareness & Action — an AI-Powered Safety-Aware Navigation System</i></p>
+
+<p align="center">
+  <a href="#the-problem">The Problem</a> •
+  <a href="#the-gap">The Gap</a> •
+  <a href="#key-innovation">Key Innovation</a> •
+  <a href="#how-it-works">How It Works</a> •
+  <a href="#what-it-scores">What It Scores</a> •
+  <a href="#quickstart">Quickstart</a> •
+  <a href="#demo">Demo</a> •
+  <a href="#scope--limitations">Scope</a> •
+  <a href="#data-strategy">Data Strategy</a> •
+  <a href="#roadmap">Roadmap</a> •
+  <a href="#team">Team</a>
+</p>
+
+<p align="center">
+  <b>Girls Hack Day Delhi 2026 · Problem Statement PS-12</b>
+</p>
+
 ---
-
-## Table of Contents
-
-- [About](#about)
-- [The Problem](#the-problem)
-- [What Makes AIRAA Different](#what-makes-airaa-different)
-- [Pilot Zone](#pilot-zone)
-- [Features](#features)
-- [How It Works](#how-it-works)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Model Evaluation](#model-evaluation)
-- [Route Safety Results](#route-safety-results)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Ethics, Privacy & Anti-Gaming](#ethics-privacy--anti-gaming)
-- [Data Strategy — Current vs. Production](#data-strategy--current-vs-production)
-- [Roadmap](#roadmap)
-- [Known Limitations](#known-limitations)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
----
-
-## About
-
-**AIRAA** is an AI-powered safety-intelligence platform that computes safety-weighted pedestrian routing — recommending routes that actively avoid high-risk areas, as a complement to standard navigation apps. It was built for **Girls Hack Day Delhi 2026** (Problem Statement PS-12: *"Create an AI-powered system that identifies unsafe locations based on community reports and public data."*)
-
-Most existing safety apps stop at showing a map with red pins on it. AIRAA goes one step further: it turns that risk information into an actual, actionable route — the same way a maps app routes around traffic, except here it's routing around danger.
 
 ## The Problem
 
-Public spaces in Indian cities are unevenly safe for women — and that unevenness is largely invisible, both to someone planning a walk and to the officials who could fix it.
+Public spaces in Indian cities remain unevenly safe for women — but that unevenness is largely invisible, both to someone planning a journey and to the municipal bodies that could actually fix it.
 
-- Official crime statistics under-report harassment, stalking, and groping — most incidents are never formally filed.
-- Purely crowdsourced safety apps (pin-drop maps) struggle with **sparse, biased, and stale data** — a handful of unverified reports can permanently paint a neighborhood as dangerous, or a genuinely unsafe area can look "clean" simply because nobody reported it.
-- No existing deployed system in India converts a risk score into an **actual safer route** — you're left to interpret a heatmap yourself.
+Official crime statistics under-report harassment: most incidents of eve-teasing, stalking, and groping are never formally filed. Purely crowdsourced safety apps struggle with sparse, biased, and stale data — a handful of unverified pins can permanently paint a neighborhood as dangerous, while genuinely unsafe streets stay invisible simply because nobody reported them.
 
-## What Makes AIRAA Different
+**The data problem is solved in pieces. Nobody has shipped the whole pipeline.**
 
-| Capability | Typical Safety Apps | AIRAA |
-|---|---|---|
-| Crowdsourced incident intake | ✅ | ✅ |
-| NLP understanding of free-text reports | ❌ | ✅ |
-| Anti-gaming / corroboration filtering | ❌ | ✅ |
-| Converts risk score into a safer **route** | ❌ | ✅ |
-| Explainable, evidence-backed risk scores | ❌ | ✅ |
-| Privacy-preserving (k-anonymity) display | Rarely | ✅ |
+## The Gap
 
-## Pilot Zone
+Crowdsourced safety-reporting apps (Safecity, SafetiPin) and official panic-button apps (Himmat) already exist in India, and academic literature has separately solved crime-hotspot prediction (KDE/STKDE), NLP-based safety-text classification, and safety-aware routing. But no reviewed system — deployed or academic — closes all of these gaps **together**:
 
-**OMR IT Corridor & Taramani, Chennai** — chosen for its mix of employment hubs, transit stations, and educational campuses.
+| Capability | Safecity / SafetiPin | Himmat | Academic KDE/NLP models | AIRAA |
+|---|:---:|:---:|:---:|:---:|
+| Crowdsourced incident intake | ✅ | Panic button only | ❌ | ✅ |
+| NLP understanding of free-text reports | ❌ | ❌ | Partial | ✅ |
+| Anti-gaming / corroboration filtering | Not published | ❌ | Rarely | ✅ |
+| Predictive (not just descriptive) risk model | ❌ raw pin density | ❌ | ✅ | ✅ |
+| **Converts risk score into a safer route** | ❌ | ❌ | ❌ | ✅ |
+| Explainable, evidence-backed risk score | ❌ | ❌ | Partial | ✅ (full panel planned) |
 
-- Includes Tidel Park, OMR offices, Taramani MRTS, and IIT Madras.
-- Bounding box: South `12.960` · West `80.220` · North `12.995` · East `80.265`
+The action layer — turning a risk score into a safer route rather than leaving the user to interpret a heatmap — is the least-explored piece of all. **That's the specific gap AIRAA is built to close.**
 
-## Features
+## Key Innovation
 
-- 📍 **Incident Reporting** — structured + free-text report submission, rate-limited to prevent spam (3 reports/min per IP)
-- 🧠 **AI Report Classification** — free-text reports are automatically categorized (harassment, poor lighting, stalking, etc.) and scored for severity
-- 🗺️ **Live Risk Grid** — the pilot zone is divided into cells, each with a dynamically computed risk score
-- 🛣️ **Safety-Aware Routing** — three route options per trip: shortest, safest, and an alternative — so users see the safety/time trade-off explicitly
-- 🚨 **Emergency SOS Locator** — nearest police stations and hospitals, pulled from live OpenStreetMap data
-- 🛡️ **Anti-Gaming Protection** — isolated, uncorroborated reports are discounted; high-severity unverified reports go to a human moderator queue
-- 🕵️ **Privacy by Design** — individual report locations are hidden unless at least 3 reports exist in that grid cell (k-anonymity)
-- 📊 **Live Model Evaluation** — classifier accuracy and route-safety improvements are computed and exposed via API, not hardcoded
+> AIRAA doesn't just show where it's unsafe — it changes the route. Risk isn't a colour overlay sitting on top of the map; it's an actual cost fed into the pathfinding algorithm, so the "safer" route recommendation is mathematically derived, not manually curated.
+
+Rather than trusting every user-submitted pin at face value, AIRAA puts a **trust and corroboration layer in front of the risk model** — isolated, unverified reports are discounted, high-severity unverified claims go to a human moderator, and individual report locations are hidden behind a k-anonymity threshold. Every risk score is meant to be read as *evidence-backed*, not asserted as objective fact.
+
+**The infrastructure for safer cities already exists — streets, transit, hospitals, police stations. What's been missing is the intelligence layer that turns scattered, low-trust reports into a route you can actually act on. We're building it.**
 
 ## How It Works
 
-1. A user submits an incident report (text + location).
-2. The report is classified into a **category** and **severity** — via an LLM (Gemini) if available, or a local ML fallback otherwise.
-3. The report is checked for **corroboration** against nearby, recent reports before it meaningfully affects the risk map.
-4. High-severity, uncorroborated reports are flagged for **human moderator review** rather than published automatically.
-5. Approved reports update the **risk grid** for their area, with each cell's score feeding into route calculations.
-6. When a user requests a route, road network edges are weighted by risk, and the system solves for the shortest, safest, and an alternative path.
-
-## Architecture
-
 ```
-┌─────────────┐      ┌──────────────────┐      ┌───────────────────┐
-│  Frontend   │─────▶│  FastAPI Backend  │─────▶│  Risk Grid Engine  │
-│ (React/Vite)│      │                   │      │  (corroboration,   │
-└─────────────┘      │  ┌─────────────┐  │      │   k-anonymity,     │
-                      │  │ NLP Classi- │  │      │   moderation)      │
-                      │  │ fier (Gemini│  │      └─────────┬─────────┘
-                      │  │ / TF-IDF +  │  │                │
-                      │  │ Decision    │  │                ▼
-                      │  │ Tree)       │  │      ┌───────────────────┐
-                      │  └─────────────┘  │      │  Routing Engine    │
-                      │                   │─────▶│  (OSMnx + NetworkX,│
-                      └───────────────────┘      │   Dijkstra/A*)     │
-                                                  └───────────────────┘
+Incident Report (text + location)
+        │
+        ▼
+NLP Classifier  ──  Gemini (primary) / TF-IDF + Decision Tree (fallback)
+        │
+        ▼
+Category + Severity
+        │
+        ▼
+Corroboration & Trust Scoring  ──  150m / 3-day proximity check, k-anonymity, rate limiting
+        │
+        ├──────────────┐
+        ▼              ▼
+ Auto-Published    Flagged for Human
+  to Risk Grid       Moderator Review
+        │              │
+        └──────┬───────┘
+               ▼
+        Risk-Weighted Grid
+   edge_cost = distance × (1 + risk_weight × cell_risk_score)
+               │
+               ▼
+   Routing Engine  ──  OSMnx + NetworkX, Dijkstra / A*
+               │
+               ▼
+   Shortest / Safest / Alternative Routes + Emergency SOS Locator
 ```
 
-**Layers, at a glance:**
+**Deterministic trust filtering sits in front of the risk model — not instead of it.**
 
-| Layer | Function |
-|---|---|
-| Data Ingestion | Structured + free-text incident reports; OpenStreetMap road & POI data |
-| Trust Scoring | Corroboration check, rate limiting, spam filtering |
-| NLP Understanding | Gemini (primary) or TF-IDF + Decision Tree (fallback) for category/severity |
-| Risk Modelling | Per-cell risk score, decayed by corroboration and isolation |
-| Routing Engine | Weighted graph (OSMnx + NetworkX), Dijkstra/A* for shortest/safest/alternative routes |
-| Application Layer | Map UI, report form, route planner, SOS locator |
+## What It Scores
+
+Every incident report is classified into a category and severity, sourced from real report text — not asserted without evidence:
+
+| Category | Example Trigger Signal | Handling |
+|---|---|:---:|
+| Harassment / stalking | Free-text description, keyword + context signals | Classified, corroboration-checked |
+| Poor lighting / infrastructure | Environmental description in report text | Classified, feeds risk grid |
+| Isolated / low-footfall area | Location + time-of-day pattern | Feeds risk weighting |
+| High-severity, uncorroborated report | Severity ≥ 4, zero nearby matching reports | 🔴 Routed to human moderator queue |
+| Isolated, uncorroborated report | No other logs within 150m / 3 days | 🟡 Discounted 80% in risk scoring |
+| Duplicate / spam submission | > 3 reports per minute from one IP | 🟢 Rate-limited at ingestion |
+
+Every published risk score traces back to real report evidence and a corroboration state — no score is shown without something backing it.
+
+## Quickstart
+
+```bash
+git clone https://github.com/madhu2007-offical/AIRAA.git
+cd AIRAA
+
+# Backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python backend/data/generate_synthetic_reports.py
+uvicorn backend.main:app --reload
+
+# Frontend (separate terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+**Sample output:**
+<img width="1536" height="995" alt="Screenshot — route comparison" src="PASTE_YOUR_SCREENSHOT_URL_HERE" />
+
+### Run with Docker (optional)
+
+```bash
+docker build -t airaa .
+docker run --rm -p 8000:8000 --env-file .env airaa
+```
+
+## Demo
+
+**[Live Demo](https://frontend-theta-bice-51.vercel.app/)**
+
+**[Pitch Deck](#)** — *add your slide deck link here*
+
+## Scope & Limitations
+
+We scoped this narrow on purpose — **narrow and correct beats broad and wrong.**
+
+**What it does**
+- Classifies free-text incident reports into category + severity using an LLM (Gemini) or a local ML fallback
+- Filters reports through corroboration and rate-limit checks before they affect the public risk map
+- Computes a live, per-cell risk grid over the pilot zone
+- Solves shortest, safest, and alternative routes over a real Chennai road network
+- Surfaces nearby police stations and hospitals via live OpenStreetMap data
+- Reports classifier accuracy and route-safety metrics dynamically via `/api/evaluation` — not hardcoded numbers
+
+**What it doesn't do (yet)**
+- Use real-world incident data — current reports are synthetic, template-generated for demo purposes
+- Show a full explainability panel (evidence breakdown per zone) — currently a roadmap item
+- Cap the maximum acceptable detour length for the "safest" route vs. the shortest
+- Persist data reliably across redeploys — current storage is not yet production-grade
+- Authenticate reporters — current rate limiting is IP-based, which is bypassable
+
+## Data Strategy
+
+Real, verified, granular incident data isn't obtainable in a hackathon timeframe, and no judge realistically expects it. AIRAA's approach:
+
+- **Real data**: road network and police/hospital locations are pulled live from **OpenStreetMap** via OSMnx — the geography is genuine.
+- **Synthetic data**: incident reports are generated from template-expanded sentence variations (1,728 training examples for the NLP classifier), clearly labelled as simulated crowdsourced input — standard, expected hackathon practice.
+- **Production path**: real user-submitted reports (bootstrapped via NGO/campus safety partnerships), fused with public aggregate data (NCRB, state police open-data portals, municipal streetlight/CCTV records) where available.
 
 ## Tech Stack
 
-**Backend:** Python 3, FastAPI, scikit-learn (TF-IDF + Decision Tree), Google Gemini API, OSMnx, NetworkX
-**Frontend:** React, Vite
-**Data:** OpenStreetMap (road network, police/hospital POIs), synthetic incident reports (see [Data Strategy](#data-strategy--current-vs-production))
-**Deployment:** Render (backend), Vercel (frontend)
+`Python 3.11` · `FastAPI` · `scikit-learn (TF-IDF + Decision Tree)` · `Google Gemini API` · `OSMnx` · `NetworkX` · `React` · `Vite` · `Docker`
 
-## Model Evaluation
+## Project Structure
 
-Computed dynamically on backend startup via `/api/evaluation` — not hardcoded.
-
-### NLP Classifier (Decision Tree fallback)
-
-| Metric | Score |
-|---|---|
-| Training set size | 1,728 sentence variations |
-| Validation split | 80/20 train/test |
-| Category F1-score | **86.0%** (target: ≥85%) |
-| Precision (macro) | **92.2%** |
-| Recall (macro) | **85.3%** |
-| Severity accuracy | **72.5%** |
-
-> Category classification exceeds target; severity is a known weaker point, as urgency is harder to infer from short free text than category.
-
-## Route Safety Results
-
-| Route | Shortest Path Avg. Risk | Safest Path Avg. Risk | Risk Reduction |
-|---|---|---|---|
-| Taramani MRTS → VHS Hospital | 86.2% | 54.5% | **−36.8%** |
-| Tidel Park → SRP Tools Junction | 90.1% | 61.2% | **−32.0%** |
-| Perungudi Bus Stop → Kandanchavadi | 78.4% | 51.0% | **−34.9%** |
-
-## Getting Started
-
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- A Gemini API key (optional — falls back to local classifier if omitted)
-
-### Backend
-
-```bash
-# 1. Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Seed synthetic Chennai reports
-python backend/data/generate_synthetic_reports.py
-
-# 4. Run the API
-uvicorn backend.main:app --reload
 ```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev        # local development
-npm run build       # production build
+AIRAA/
+├── backend/
+│   ├── main.py                 # FastAPI entrypoint
+│   ├── data/
+│   │   └── generate_synthetic_reports.py
+│   ├── classifier/              # Gemini + TF-IDF/Decision Tree pipeline
+│   ├── risk_grid/                 # corroboration, k-anonymity, moderation queue
+│   └── routing/                     # OSMnx graph + NetworkX shortest-path logic
+├── cache/                             # cached road network graph
+├── frontend/
+│   ├── src/                             # React/Vite app
+│   └── package.json
+├── .env.example
+├── render.yaml
+├── requirements.txt
+└── README.md
 ```
-
-**Live demo:** [frontend-theta-bice-51.vercel.app](https://frontend-theta-bice-51.vercel.app/)
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and fill in:
-
-| Variable | Required | Description |
-|---|---|---|
-| `GEMINI_API_KEY` | No | If set, used for primary NLP classification. If absent, falls back to local TF-IDF + Decision Tree model. |
-| `DATABASE_URL` | Depends on setup | Connection string if using a persistent database. |
-| `PORT` | Set by host (e.g. Render) | Server listens on this port. |
-
-> ⚠️ Never commit a real `.env` file. Keep API keys only in your deployment platform's environment settings.
-
-## Ethics, Privacy & Anti-Gaming
-
-Safety apps carry real risk of misuse if built carelessly. AIRAA's design responds directly to that:
-
-- **k-Anonymity**: individual incident pins are hidden unless at least **3 reports** exist in that grid cell, preventing anyone from tracing a report back to a specific person or moment.
-- **Corroboration Discounting**: isolated, uncorroborated reports (no other logs within 150m and 3 days) are discounted by **80%** — a single report can't unilaterally paint an area as dangerous.
-- **Human Moderator Queue**: reports with severity ≥4 and zero corroboration are held for manual review before being published.
-- **Rate Limiting**: incident submissions are capped per IP to reduce spam and flooding.
-- **No objective-truth framing**: risk scores are meant to be read as evidence-backed estimates, not verified fact — a full explainability panel (planned) shows what evidence backs each score.
-
-## Data Strategy — Current vs. Production
-
-**Right now (hackathon build):**
-- Incident reports are **synthetic**, generated from template-expanded sentence variations — there is no publicly available, granular women's-safety incident dataset for Indian cities at street level.
-- Road network and police/hospital locations are **real**, pulled live from OpenStreetMap.
-- The full pipeline (classification → corroboration → risk scoring → routing) is fully functional and would run identically on real data.
-
-**If this moves toward real deployment:**
-- Real user-submitted incident reports, bootstrapped via partnerships with local NGOs / women's safety initiatives / campus safety programs.
-- Public safety data fusion — NCRB statistics, state police open-data portals, municipal infrastructure records (streetlight/CCTV coverage) where published.
-- A time-decayed, multi-signal risk formula (recency-weighted incident density, time-of-day risk buckets, footfall-normalized exposure, external corroboration) replacing the current simpler scoring model.
-- Confidence scores shown alongside risk scores, so sparse-data areas aren't presented with false certainty.
 
 ## Roadmap
 
-- [ ] Fix production deployment stability (backend cold-start / startup crash)
-- [ ] Move risk classifier training to a one-time offline step instead of retraining on every server start
-- [ ] Add time-of-day risk buckets (same street, different risk by hour)
-- [ ] Add explainability panel — show evidence behind each zone's score
-- [ ] Add confidence/data-density indicator per grid cell
-- [ ] Migrate to persistent managed database (e.g. Postgres) before handling real user data
-- [ ] Device/account-based rate limiting (stronger than IP-based)
+- [x] NLP classification pipeline — Gemini primary, TF-IDF + Decision Tree fallback
+- [x] Corroboration-based risk scoring + k-anonymity display filter
+- [x] Safety-weighted routing (shortest / safest / alternative)
+- [x] Live model evaluation endpoint
+- [ ] Fix production deployment stability (backend startup crash on Render)
+- [ ] Explainability panel — show evidence behind each zone's score
+- [ ] Confidence/data-density indicator per grid cell
+- [ ] Time-of-day risk buckets (same street, different risk by hour)
+- [ ] Migrate to persistent managed database before handling real user data
+- [ ] Device/account-based rate limiting
 - [ ] Expand beyond pilot zone to additional Chennai/Delhi corridors
 
-## Known Limitations
+## Team
 
-- Current risk data is synthetic, not real-world incident data.
-- Severity classification accuracy (72.5%) is meaningfully lower than category accuracy (86%).
-- Rate limiting is IP-based and can be bypassed.
-- No hard cap on how much longer a "safest" route can be vs. the shortest route.
-- Data persistence across deployments/restarts is not yet production-grade.
+<div align="center">
 
-## Contributing
+### *Team Falcon*
 
-Contributions, issues, and feature requests are welcome. Feel free to check the [issues page](../../issues).
+**Girls Hack Day Delhi 2026 · Problem Statement PS-12**
 
-1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+</div>
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Acknowledgements
-
-- Built for **Girls Hack Day Delhi 2026** (Problem Statement PS-12)
-- Road network and POI data — [OpenStreetMap](https://www.openstreetmap.org/) via [OSMnx](https://github.com/gboeing/osmnx)
-- Graph routing — [NetworkX](https://networkx.org/)
-- NLP classification — [Google Gemini API](https://ai.google.dev/) (primary), scikit-learn (fallback)
+This project is released under the [MIT License](LICENSE).
 
 ---
 
 <div align="center">
-
-Made with care, for safer streets.
-
-</div><div align="center">
-
-<img src="https://via.placeholder.com/160x160.png?text=AIRAA" alt="AIRAA Logo" width="140"/>
-
-# AIRAA
-### Adaptive Intelligence for Risk Awareness & Action
-
-**AI-powered safety navigation — routes people around danger, not just around traffic.**
-
-[![Status](https://img.shields.io/badge/status-hackathon%20prototype-orange)]()
-[![Python](https://img.shields.io/badge/backend-Python%203-blue)]()
-[![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Vite-61dafb)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://frontend-theta-bice-51.vercel.app/)
-
-[Live Demo](https://frontend-theta-bice-51.vercel.app/) · [Report a Bug](../../issues) · [Request a Feature](../../issues)
-
-</div>
-
----
-
-## Table of Contents
-
-- [About](#about)
-- [The Problem](#the-problem)
-- [What Makes AIRAA Different](#what-makes-airaa-different)
-- [Pilot Zone](#pilot-zone)
-- [Features](#features)
-- [How It Works](#how-it-works)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Model Evaluation](#model-evaluation)
-- [Route Safety Results](#route-safety-results)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Ethics, Privacy & Anti-Gaming](#ethics-privacy--anti-gaming)
-- [Data Strategy — Current vs. Production](#data-strategy--current-vs-production)
-- [Roadmap](#roadmap)
-- [Known Limitations](#known-limitations)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
----
-
-## About
-
-**AIRAA** is an AI-powered safety-intelligence platform that computes safety-weighted pedestrian routing — recommending routes that actively avoid high-risk areas, as a complement to standard navigation apps. It was built for **Girls Hack Day Delhi 2026** (Problem Statement PS-12: *"Create an AI-powered system that identifies unsafe locations based on community reports and public data."*)
-
-Most existing safety apps stop at showing a map with red pins on it. AIRAA goes one step further: it turns that risk information into an actual, actionable route — the same way a maps app routes around traffic, except here it's routing around danger.
-
-## The Problem
-
-Public spaces in Indian cities are unevenly safe for women — and that unevenness is largely invisible, both to someone planning a walk and to the officials who could fix it.
-
-- Official crime statistics under-report harassment, stalking, and groping — most incidents are never formally filed.
-- Purely crowdsourced safety apps (pin-drop maps) struggle with **sparse, biased, and stale data** — a handful of unverified reports can permanently paint a neighborhood as dangerous, or a genuinely unsafe area can look "clean" simply because nobody reported it.
-- No existing deployed system in India converts a risk score into an **actual safer route** — you're left to interpret a heatmap yourself.
-
-## What Makes AIRAA Different
-
-| Capability | Typical Safety Apps | AIRAA |
-|---|---|---|
-| Crowdsourced incident intake | ✅ | ✅ |
-| NLP understanding of free-text reports | ❌ | ✅ |
-| Anti-gaming / corroboration filtering | ❌ | ✅ |
-| Converts risk score into a safer **route** | ❌ | ✅ |
-| Explainable, evidence-backed risk scores | ❌ | ✅ |
-| Privacy-preserving (k-anonymity) display | Rarely | ✅ |
-
-## Pilot Zone
-
-**OMR IT Corridor & Taramani, Chennai** — chosen for its mix of employment hubs, transit stations, and educational campuses.
-
-- Includes Tidel Park, OMR offices, Taramani MRTS, and IIT Madras.
-- Bounding box: South `12.960` · West `80.220` · North `12.995` · East `80.265`
-
-## Features
-
-- 📍 **Incident Reporting** — structured + free-text report submission, rate-limited to prevent spam (3 reports/min per IP)
-- 🧠 **AI Report Classification** — free-text reports are automatically categorized (harassment, poor lighting, stalking, etc.) and scored for severity
-- 🗺️ **Live Risk Grid** — the pilot zone is divided into cells, each with a dynamically computed risk score
-- 🛣️ **Safety-Aware Routing** — three route options per trip: shortest, safest, and an alternative — so users see the safety/time trade-off explicitly
-- 🚨 **Emergency SOS Locator** — nearest police stations and hospitals, pulled from live OpenStreetMap data
-- 🛡️ **Anti-Gaming Protection** — isolated, uncorroborated reports are discounted; high-severity unverified reports go to a human moderator queue
-- 🕵️ **Privacy by Design** — individual report locations are hidden unless at least 3 reports exist in that grid cell (k-anonymity)
-- 📊 **Live Model Evaluation** — classifier accuracy and route-safety improvements are computed and exposed via API, not hardcoded
-
-## How It Works
-
-1. A user submits an incident report (text + location).
-2. The report is classified into a **category** and **severity** — via an LLM (Gemini) if available, or a local ML fallback otherwise.
-3. The report is checked for **corroboration** against nearby, recent reports before it meaningfully affects the risk map.
-4. High-severity, uncorroborated reports are flagged for **human moderator review** rather than published automatically.
-5. Approved reports update the **risk grid** for their area, with each cell's score feeding into route calculations.
-6. When a user requests a route, road network edges are weighted by risk, and the system solves for the shortest, safest, and an alternative path.
-
-## Architecture
-
-```
-┌─────────────┐      ┌──────────────────┐      ┌───────────────────┐
-│  Frontend   │─────▶│  FastAPI Backend  │─────▶│  Risk Grid Engine  │
-│ (React/Vite)│      │                   │      │  (corroboration,   │
-└─────────────┘      │  ┌─────────────┐  │      │   k-anonymity,     │
-                      │  │ NLP Classi- │  │      │   moderation)      │
-                      │  │ fier (Gemini│  │      └─────────┬─────────┘
-                      │  │ / TF-IDF +  │  │                │
-                      │  │ Decision    │  │                ▼
-                      │  │ Tree)       │  │      ┌───────────────────┐
-                      │  └─────────────┘  │      │  Routing Engine    │
-                      │                   │─────▶│  (OSMnx + NetworkX,│
-                      └───────────────────┘      │   Dijkstra/A*)     │
-                                                  └───────────────────┘
-```
-
-**Layers, at a glance:**
-
-| Layer | Function |
-|---|---|
-| Data Ingestion | Structured + free-text incident reports; OpenStreetMap road & POI data |
-| Trust Scoring | Corroboration check, rate limiting, spam filtering |
-| NLP Understanding | Gemini (primary) or TF-IDF + Decision Tree (fallback) for category/severity |
-| Risk Modelling | Per-cell risk score, decayed by corroboration and isolation |
-| Routing Engine | Weighted graph (OSMnx + NetworkX), Dijkstra/A* for shortest/safest/alternative routes |
-| Application Layer | Map UI, report form, route planner, SOS locator |
-
-## Tech Stack
-
-**Backend:** Python 3, FastAPI, scikit-learn (TF-IDF + Decision Tree), Google Gemini API, OSMnx, NetworkX
-**Frontend:** React, Vite
-**Data:** OpenStreetMap (road network, police/hospital POIs), synthetic incident reports (see [Data Strategy](#data-strategy--current-vs-production))
-**Deployment:** Render (backend), Vercel (frontend)
-
-## Model Evaluation
-
-Computed dynamically on backend startup via `/api/evaluation` — not hardcoded.
-
-### NLP Classifier (Decision Tree fallback)
-
-| Metric | Score |
-|---|---|
-| Training set size | 1,728 sentence variations |
-| Validation split | 80/20 train/test |
-| Category F1-score | **86.0%** (target: ≥85%) |
-| Precision (macro) | **92.2%** |
-| Recall (macro) | **85.3%** |
-| Severity accuracy | **72.5%** |
-
-> Category classification exceeds target; severity is a known weaker point, as urgency is harder to infer from short free text than category.
-
-## Route Safety Results
-
-| Route | Shortest Path Avg. Risk | Safest Path Avg. Risk | Risk Reduction |
-|---|---|---|---|
-| Taramani MRTS → VHS Hospital | 86.2% | 54.5% | **−36.8%** |
-| Tidel Park → SRP Tools Junction | 90.1% | 61.2% | **−32.0%** |
-| Perungudi Bus Stop → Kandanchavadi | 78.4% | 51.0% | **−34.9%** |
-
-## Getting Started
-
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- A Gemini API key (optional — falls back to local classifier if omitted)
-
-### Backend
-
-```bash
-# 1. Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Seed synthetic Chennai reports
-python backend/data/generate_synthetic_reports.py
-
-# 4. Run the API
-uvicorn backend.main:app --reload
-```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev        # local development
-npm run build       # production build
-```
-
-**Live demo:** [frontend-theta-bice-51.vercel.app](https://frontend-theta-bice-51.vercel.app/)
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and fill in:
-
-| Variable | Required | Description |
-|---|---|---|
-| `GEMINI_API_KEY` | No | If set, used for primary NLP classification. If absent, falls back to local TF-IDF + Decision Tree model. |
-| `DATABASE_URL` | Depends on setup | Connection string if using a persistent database. |
-| `PORT` | Set by host (e.g. Render) | Server listens on this port. |
-
-> ⚠️ Never commit a real `.env` file. Keep API keys only in your deployment platform's environment settings.
-
-## Ethics, Privacy & Anti-Gaming
-
-Safety apps carry real risk of misuse if built carelessly. AIRAA's design responds directly to that:
-
-- **k-Anonymity**: individual incident pins are hidden unless at least **3 reports** exist in that grid cell, preventing anyone from tracing a report back to a specific person or moment.
-- **Corroboration Discounting**: isolated, uncorroborated reports (no other logs within 150m and 3 days) are discounted by **80%** — a single report can't unilaterally paint an area as dangerous.
-- **Human Moderator Queue**: reports with severity ≥4 and zero corroboration are held for manual review before being published.
-- **Rate Limiting**: incident submissions are capped per IP to reduce spam and flooding.
-- **No objective-truth framing**: risk scores are meant to be read as evidence-backed estimates, not verified fact — a full explainability panel (planned) shows what evidence backs each score.
-
-## Data Strategy — Current vs. Production
-
-**Right now (hackathon build):**
-- Incident reports are **synthetic**, generated from template-expanded sentence variations — there is no publicly available, granular women's-safety incident dataset for Indian cities at street level.
-- Road network and police/hospital locations are **real**, pulled live from OpenStreetMap.
-- The full pipeline (classification → corroboration → risk scoring → routing) is fully functional and would run identically on real data.
-
-**If this moves toward real deployment:**
-- Real user-submitted incident reports, bootstrapped via partnerships with local NGOs / women's safety initiatives / campus safety programs.
-- Public safety data fusion — NCRB statistics, state police open-data portals, municipal infrastructure records (streetlight/CCTV coverage) where published.
-- A time-decayed, multi-signal risk formula (recency-weighted incident density, time-of-day risk buckets, footfall-normalized exposure, external corroboration) replacing the current simpler scoring model.
-- Confidence scores shown alongside risk scores, so sparse-data areas aren't presented with false certainty.
-
-## Roadmap
-
-- [ ] Fix production deployment stability (backend cold-start / startup crash)
-- [ ] Move risk classifier training to a one-time offline step instead of retraining on every server start
-- [ ] Add time-of-day risk buckets (same street, different risk by hour)
-- [ ] Add explainability panel — show evidence behind each zone's score
-- [ ] Add confidence/data-density indicator per grid cell
-- [ ] Migrate to persistent managed database (e.g. Postgres) before handling real user data
-- [ ] Device/account-based rate limiting (stronger than IP-based)
-- [ ] Expand beyond pilot zone to additional Chennai/Delhi corridors
-
-## Known Limitations
-
-- Current risk data is synthetic, not real-world incident data.
-- Severity classification accuracy (72.5%) is meaningfully lower than category accuracy (86%).
-- Rate limiting is IP-based and can be bypassed.
-- No hard cap on how much longer a "safest" route can be vs. the shortest route.
-- Data persistence across deployments/restarts is not yet production-grade.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome. Feel free to check the [issues page](../../issues).
-
-1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Acknowledgements
-
-- Built for **Girls Hack Day Delhi 2026** (Problem Statement PS-12)
-- Road network and POI data — [OpenStreetMap](https://www.openstreetmap.org/) via [OSMnx](https://github.com/gboeing/osmnx)
-- Graph routing — [NetworkX](https://networkx.org/)
-- NLP classification — [Google Gemini API](https://ai.google.dev/) (primary), scikit-learn (fallback)
-
----
-
-<div align="center">
-
-Made with care, for safer streets.
-
+<i>"See the city honestly. Act on it in the moment. Feed it back to the people who can fix it."</i>
 </div>
