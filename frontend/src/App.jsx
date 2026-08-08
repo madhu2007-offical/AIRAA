@@ -104,13 +104,16 @@ const getReportIcon = (category) => {
 };
 
 // Map fly-to helper
-function ChangeView({ center, zoom }) {
+function ChangeView({ center, zoom, activeRouteCoords }) {
   const map = useMap();
   useEffect(() => {
-    if (center) {
-      map.setView(center, zoom || map.getZoom(), { animate: true, duration: 1.0 });
+    if (activeRouteCoords && activeRouteCoords.length > 0) {
+      const flipped = activeRouteCoords.map(c => [c[1], c[0]]);
+      map.fitBounds(flipped, { padding: [30, 30], maxZoom: 16, animate: true, duration: 0.4 });
+    } else if (center) {
+      map.setView(center, zoom || map.getZoom(), { animate: true, duration: 0.4 });
     }
-  }, [center, zoom]);
+  }, [center, zoom, activeRouteCoords, map]);
   return null;
 }
 
@@ -1798,7 +1801,7 @@ export default function App() {
                       scrollWheelZoom={false}
                       style={{ width: '100%', height: '100%' }}
                     >
-                      <ChangeView center={mapCenter} zoom={mapZoom} />
+                      <ChangeView center={mapCenter} zoom={mapZoom} activeRouteCoords={routes[activeRouteIndex]?.coordinates} />
                       <MapClickEvents onMapClick={handleMapClick} />
                       
                        <TileLayer
