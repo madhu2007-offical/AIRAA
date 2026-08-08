@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://airaa-backend.onrender.com/api/:path*"
+      "destination": "https://airaa-pooc.onrender.com/api/:path*"
     }
   ]
 }
