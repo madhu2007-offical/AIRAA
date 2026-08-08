@@ -115,7 +115,7 @@ def get_moderation_queue():
 
 post_approve_router = APIRouter(prefix="/api/reports", tags=["reports"])
 @post_approve_router.post("/{report_id}/approve")
-def approve_pending_report(report_id: int):
+def approve_pending_report(report_id: str):
     """
     Approves a pending report and merges it into the public risk scored grid.
     """
@@ -129,7 +129,7 @@ def approve_pending_report(report_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @post_approve_router.delete("/{report_id}/reject")
-def reject_pending_report(report_id: int):
+def reject_pending_report(report_id: str):
     """
     Rejects and deletes a flagged/spam report.
     """

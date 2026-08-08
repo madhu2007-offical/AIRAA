@@ -130,13 +130,20 @@ def generate_report(timestamp: datetime.datetime) -> dict:
     }
 
 def main():
-    db_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "airaa.db")
-    if os.path.exists(db_file):
-        os.remove(db_file)
-        print(f"Removed existing database: {db_file}")
+    MONGO_URI = os.getenv("MONGO_URI")
+    if MONGO_URI:
+        from data.db import mongo_collection
+        if mongo_collection is not None:
+            mongo_collection.delete_many({})
+            print("Cleared existing MongoDB reports collection.")
+    else:
+        db_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "airaa.db")
+        if os.path.exists(db_file):
+            os.remove(db_file)
+            print(f"Removed existing database: {db_file}")
         
     init_db()
-    print("Initialized SQLite database with Status support.")
+    print("Initialized database schema.")
     
     num_reports = 400
     start_date = datetime.datetime.now() - datetime.timedelta(days=30)
