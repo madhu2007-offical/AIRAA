@@ -300,8 +300,8 @@ export default function App() {
   const [showGrid, setShowGrid] = useState(true);
   const [showReportMarkers, setShowReportMarkers] = useState(true);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('all');
-  const [mapCenter, setMapCenter] = useState([11.1271, 78.6569]);
-  const [mapZoom, setMapZoom] = useState(7);
+  const [mapCenter, setMapCenter] = useState([12.978, 80.243]);
+  const [mapZoom, setMapZoom] = useState(14);
   const [statusMessage, setStatusMessage] = useState('');
 
   // Fetch initial maps and reports on component load
