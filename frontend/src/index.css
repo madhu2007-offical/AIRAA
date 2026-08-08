@@ -1008,14 +1008,6 @@ body, html {
   color: #5B6280 !important;
 }
 
-/* Scoped text colors inside the dark right sidebar */
-.map-card-wrapper .bg-\[\#12182B\] span,
-.map-card-wrapper .bg-\[\#12182B\] label,
-.map-card-wrapper .bg-\[\#12182B\] p,
-.map-card-wrapper .bg-\[\#12182B\] h4 {
-  color: rgba(255, 255, 255, 0.9) !important;
-}
-
 .map-card-wrapper .bg-slate-100 {
   background-color: rgba(0, 0, 0, 0.03) !important;
 }

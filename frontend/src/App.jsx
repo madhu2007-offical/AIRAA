@@ -2002,37 +2002,37 @@ export default function App() {
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full md:w-66 flex flex-col justify-between border-l border-[#D8DBE6] bg-[#12182B] text-white shrink-0 p-5">
+                    <div className="w-full md:w-66 flex flex-col justify-between border-l border-[#D8DBE6] bg-white text-[#1B2138] shrink-0 p-5">
                       <div>
                         {/* State safety initiative cards */}
-                        <div className="p-3 bg-white/5 border border-white/10 rounded-lg space-y-2 mb-4">
-                          <div className="flex items-center gap-1.5 text-[#E9C878] font-bold uppercase tracking-wider text-[10px]">
+                        <div className="p-3 bg-[#F4F5F9] border border-[#D8DBE6] rounded-lg space-y-2 mb-4">
+                          <div className="flex items-center gap-1.5 text-[#C9972B] font-bold uppercase tracking-wider text-[10px]">
                             <Shield className="w-3.5 h-3.5" />
                             <span>Tamil Nadu SSF Module</span>
                           </div>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[10px] text-[#5B6280] leading-relaxed">
                             Designed in alignment with the Tamil Nadu Special Security Force (SSF) safety models. Integration interfaces are mocked.
                           </p>
-                          <span className="text-[9px] bg-[#E9C878] text-slate-900 font-bold px-1.5 py-0.5 rounded uppercase font-mono block text-center">Future Link Stubs</span>
+                          <span className="text-[9px] bg-[#C9972B]/10 text-[#C9972B] font-bold px-1.5 py-0.5 rounded uppercase font-mono block text-center">Future Link Stubs</span>
                         </div>
 
-                        <h4 className="text-[10px] font-bold text-slate-400 tracking-wider uppercase font-mono mb-3">Map Legend</h4>
+                        <h4 className="text-[10px] font-bold text-[#5B6280] tracking-wider uppercase font-mono mb-3">Map Legend</h4>
                         <div className="space-y-3">
                           <div className="flex items-center gap-3">
                             <span className="w-3.5 h-3.5 rounded border border-[#1F7A54]" style={{ background: '#1F7A54', opacity: 0.28 }}></span>
-                            <span className="text-xs text-slate-200">Safe Zone (Low Risk)</span>
+                            <span className="text-xs text-[#1B2138]">Safe Zone (Low Risk)</span>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="w-3.5 h-3.5 rounded border border-[#B9740E]" style={{ background: '#B9740E', opacity: 0.28 }}></span>
-                            <span className="text-xs text-slate-200">Caution (Moderate)</span>
+                            <span className="text-xs text-[#1B2138]">Caution (Moderate)</span>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="w-3.5 h-3.5 rounded border border-[#A93A3A]" style={{ background: '#A93A3A', opacity: 0.28 }}></span>
-                            <span className="text-xs text-slate-200">High Risk Sector</span>
+                            <span className="text-xs text-[#1B2138]">High Risk Sector</span>
                           </div>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400 border-t border-slate-800/80 pt-4 leading-relaxed mt-4">
+                      <div className="text-[10px] text-[#5B6280] border-t border-[#D8DBE6] pt-4 leading-relaxed mt-4">
                         Grid cell threat levels require spatio-temporal corroboration and decay automatically over time. Click any cell to inspect its underlying logs.
                       </div>
                     </div>
