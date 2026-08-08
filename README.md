@@ -1,6 +1,5 @@
 <div align="center">
-
-<img width="1536" height="548" alt="poster" src="<img width="1672" height="941" alt="ChatGPT Image Aug 8, 2026, 11_24_44 AM" src="https://github.com/user-attachments/assets/3c5d67f8-8ce5-480c-8171-7f2fbd978486" />
+ src="<img width="1672" height="941" alt="ChatGPT Image Aug 8, 2026, 11_24_44 AM" src="https://github.com/user-attachments/assets/3c5d67f8-8ce5-480c-8171-7f2fbd978486" />
 " />
 
 <br/>
@@ -138,7 +137,8 @@ npm run dev
 ```
 
 **Sample output:**
-<img width="1536" height="995" alt="Screenshot — route comparison" src="PASTE_YOUR_SCREENSHOT_URL_HERE" />
+ src="<img width="1918" height="937" alt="Screenshot 2026-08-08 112014" src="https://github.com/user-attachments/assets/554da9ce-5e45-4aa7-8783-19160a435a24" />
+" />
 
 ### Run with Docker (optional)
 
@@ -150,8 +150,6 @@ docker run --rm -p 8000:8000 --env-file .env airaa
 ## Demo
 
 **[Live Demo](https://frontend-theta-bice-51.vercel.app/)**
-
-**[Pitch Deck](#)** — *add your slide deck link here*
 
 ## Scope & Limitations
 
