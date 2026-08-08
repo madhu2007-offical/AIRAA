@@ -982,12 +982,38 @@ body, html {
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
-.map-card-wrapper text, .map-card-wrapper .text-\[\#1B2138\], .map-card-wrapper span, .map-card-wrapper label {
+.map-card-wrapper text, .map-card-wrapper .text-\[\#1B2138\], .map-card-wrapper label {
   color: var(--ink) !important;
 }
 
-.map-card-wrapper .text-slate-500, .map-card-wrapper .text-slate-700, .map-card-wrapper .text-\[\#5B6280\] {
+/* Explicitly restore light-theme bg and borders inside the map card container */
+.map-card-wrapper .bg-\[\#F4F5F9\] {
+  background-color: #F4F5F9 !important;
+}
+
+.map-card-wrapper .border-\[\#D8DBE6\] {
+  border-color: #D8DBE6 !important;
+}
+
+/* Scoped text colors inside the white left sidebar */
+.map-card-wrapper .bg-white span,
+.map-card-wrapper .bg-white label,
+.map-card-wrapper .bg-white p {
   color: #1F2438 !important;
+}
+
+.map-card-wrapper .bg-white .text-\[\#5B6280\],
+.map-card-wrapper .bg-white .text-slate-500,
+.map-card-wrapper .bg-white .text-slate-700 {
+  color: #5B6280 !important;
+}
+
+/* Scoped text colors inside the dark right sidebar */
+.map-card-wrapper .bg-\[\#12182B\] span,
+.map-card-wrapper .bg-\[\#12182B\] label,
+.map-card-wrapper .bg-\[\#12182B\] p,
+.map-card-wrapper .bg-\[\#12182B\] h4 {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .map-card-wrapper .bg-slate-100 {
